@@ -1,0 +1,1 @@
+create database if not exists plan_note

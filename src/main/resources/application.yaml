@@ -1,0 +1,54 @@
+spring:
+  profiles.active: dev
+  jpa:
+    hibernate:
+      ddl-auto: "validate"
+      dialect: "PostgreSQLDialect"
+      default_schema: "plan_note"
+    show-sql: true
+
+  datasource:
+    initialization-mode: always
+    url: "jdbc:postgresql://localhost:5435/plan_note"
+    username: "slavakulik"
+    password: "qwerty12345"
+
+  flyway:
+    url: "jdbc:postgresql://localhost:5435/plan_note?ssl=false"
+    user: "slavakulik"
+    password: "qwerty12345"
+    locations: "classpath:/db/migration"
+
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+
+  freemarker:
+    templateLoaderPath:
+      - "classpath:/template/ftl/"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+name: dev-spring
+environment: develop
+enabled: true
+
+server:
+  port: 8090
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+name: prod-spring
+environment: develop
+enabled: false
+
+server:
+  port: 8095
