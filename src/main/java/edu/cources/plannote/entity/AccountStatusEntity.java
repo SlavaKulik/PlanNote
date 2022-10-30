@@ -1,16 +1,18 @@
 package edu.cources.plannote.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "account_status_list")
+@Table(name = "account_status")
 public class AccountStatusEntity {
     @Id
     @Column(name = "account_status_id")

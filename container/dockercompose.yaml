@@ -7,7 +7,7 @@ services:
       context: ./docker
       dockerfile: plannote_server
     ports:
-      - "5434:5432"
+      - "5432:5432"
   pga:
     networks:
       - default
@@ -17,7 +17,7 @@ services:
     depends_on:
       - server
     ports:
-      - "5435:80"
+      - "5433:80"
 networks:
   default:
     name: custom

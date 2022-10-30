@@ -9,15 +9,15 @@ spring:
 
   datasource:
     initialization-mode: always
-    url: "jdbc:postgresql://localhost:5435/plan_note"
+    url: "jdbc:postgresql://localhost:5432/plan_note"
     username: "slavakulik"
     password: "qwerty12345"
 
   flyway:
-    url: "jdbc:postgresql://localhost:5435/plan_note?ssl=false"
+    url: "jdbc:postgresql://localhost:5432/plan_note?ssl=false"
     user: "slavakulik"
     password: "qwerty12345"
-    locations: "classpath:/db/migration"
+    locations: "classpath:/db/migration/"
 
   main:
     allow-bean-definition-overriding: true
@@ -25,7 +25,7 @@ spring:
 
   freemarker:
     templateLoaderPath:
-      - "classpath:/template/ftl/"
+      - "classpath:/static/template/ftl/"
 
 ---
 
@@ -33,6 +33,19 @@ spring:
   config:
     activate:
       on-profile: dev
+  security:
+#    oauth2:
+#      client:
+#        registration:
+#          github:
+#            clientId: github-client-id
+#            clientSecret: github-client-secret
+#          google:
+#            client-id: google-client-id
+#            client-secret: google-client-secret
+    user:
+      name: "user"
+      password: "user"
 name: dev-spring
 environment: develop
 enabled: true

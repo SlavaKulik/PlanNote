@@ -11,9 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Inheritance(
-        strategy = InheritanceType.TABLE_PER_CLASS
-)
 @Table(name = "task_list")
 public class TaskEntity {
     @Id
@@ -28,6 +25,14 @@ public class TaskEntity {
     @JoinColumn(name = "project_task_id")
     private ProjectEntity projectTask;
 
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_task_id")
+    private UserEntity userTask;
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_status_id")
+    private StatusEntity taskStatus;
+
     @Column(name = "task_time_start")
     private Instant taskTimeStart;
 
@@ -40,7 +45,7 @@ public class TaskEntity {
 
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "priority_task_id")
-    private LabelEntity taskPriority;
+    private PriorityEntity taskPriority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskTransaction")
     private Set<TransactionEntity> transactions;

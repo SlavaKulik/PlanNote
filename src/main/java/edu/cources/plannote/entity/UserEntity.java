@@ -30,7 +30,7 @@ public class UserEntity implements UserDetails {
     private String userPosition;
 
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_status_id")
+    @JoinColumn(name = "status_id")
     private AccountStatusEntity accountStatus;
 
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
@@ -43,6 +43,9 @@ public class UserEntity implements UserDetails {
 
     @ManyToMany(mappedBy = "users")
     private Set<ProjectEntity> projects;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userTask")
+    private Set<TaskEntity> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
