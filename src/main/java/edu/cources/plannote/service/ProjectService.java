@@ -1,11 +1,15 @@
 package edu.cources.plannote.service;
 
+import edu.cources.plannote.dto.ProjectDto;
+import edu.cources.plannote.dto.TaskDto;
 import edu.cources.plannote.entity.ProjectEntity;
 import edu.cources.plannote.entity.SubtaskEntity;
 import edu.cources.plannote.entity.TaskEntity;
+import edu.cources.plannote.entity.UserEntity;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface ProjectService {
@@ -22,7 +26,7 @@ public interface ProjectService {
 
     void changeSubtaskEndTime(UUID id, Instant newTime);
 
-    List<TaskEntity> taskList();
+    List<TaskDto> taskList();
 
     void addNewTask(TaskEntity task);
 
@@ -32,5 +36,7 @@ public interface ProjectService {
 
     List<ProjectEntity> projectList();
 
-    void createNewProject(ProjectEntity project);
+    void createNewProject(ProjectDto project);
+
+//    List<UUID> getProjectsByUserId(UUID id);
 }

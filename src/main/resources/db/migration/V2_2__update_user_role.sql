@@ -1,0 +1,1 @@
+update user_list set user_role='ROLE_ADMIN' where user_list.id='09627e23-81ad-462e-8c1e-69efa95700af'

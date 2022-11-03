@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,6 +20,8 @@ public class ProjectDto {
     private String projectName;
 
     private Set<UserEntity> users;
+
+    private UserEntity user;
 
     private Set<TaskEntity> tasks;
 }

@@ -13,11 +13,7 @@ import java.util.UUID;
 @Table(name = "label_list")
 public class LabelEntity {
     @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private UUID labelId;
-
-    @Column(name = "label_name")
+    @Column(name = "label_id")
     private String labelName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskLabel")

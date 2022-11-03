@@ -1,7 +1,6 @@
 create table if not exists label_list (
-    id uuid default uuid_generate_v4 (),
-    label_name varchar not null,
-    primary key (id)
+    label_id varchar not null,
+    primary key (label_id)
 );
 
 create table if not exists project_list (
@@ -27,7 +26,7 @@ create table if not exists task_list (
     task_status_id varchar not null,
     task_time_start timestamp with time zone,
     task_time_end timestamp with time zone,
-    label_task_id uuid,
+    label_task_id varchar not null,
     priority_task_id varchar not null,
     primary key (task_id)
 );

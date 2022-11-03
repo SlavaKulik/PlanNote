@@ -3,8 +3,8 @@ const all_status = document.querySelectorAll(".status");
 let draggableTodo = null;
 
 todos.forEach((todo) => {
-    todo.addEventListener("dragstart", dragStart);
-    todo.addEventListener("dragend", dragEnd);
+    todo.addEventListener('dragstart', dragStart);
+    todo.addEventListener('dragend', dragEnd);
 });
 function dragStart() {
     draggableTodo = this;
@@ -22,10 +22,10 @@ function dragEnd() {
 }
 
 all_status.forEach((status) => {
-    status.addEventListener("dragover", dragOver);
-    status.addEventListener("dragenter", dragEnter);
-    status.addEventListener("dragleave", dragLeave);
-    status.addEventListener("drop", dragDrop);
+    status.addEventListener('dragover', dragOver);
+    status.addEventListener('dragenter', dragEnter);
+    status.addEventListener('dragleave', dragLeave);
+    status.addEventListener('drop', dragDrop);
 })
 
 function dragOver(e) {
@@ -50,9 +50,13 @@ function dragDrop() {
 
 const todo_submit = document.getElementById("todo_submit");
 
-todo_submit.addEventListener("click", createTodo);
+if(todo_submit)
+{
+    todo_submit.addEventListener('click', createTodo);
+}
 
 function createTodo() {
+
     const todo_div = document.createElement("div");
     const input_val = document.getElementById("todo_input").value;
     const txt = document.createTextNode(input_val);
@@ -76,6 +80,7 @@ function createTodo() {
     })
 
     todo_div.addEventListener("dragstart", dragStart);
+
     todo_div.addEventListener("dragend", dragEnd);
 
     document.getElementById("todo_input").value = "";

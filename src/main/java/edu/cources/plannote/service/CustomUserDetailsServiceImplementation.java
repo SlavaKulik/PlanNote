@@ -1,10 +1,17 @@
 package edu.cources.plannote.service;
 
+import edu.cources.plannote.dto.ProjectDto;
+import edu.cources.plannote.dto.UserDto;
 import edu.cources.plannote.entity.UserEntity;
 import edu.cources.plannote.repository.UserRepository;
+import edu.cources.plannote.utils.DtoToEntity;
+import edu.cources.plannote.utils.EntityToDto;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomUserDetailsServiceImplementation implements CustomUserDetailsService{
@@ -16,11 +23,37 @@ public class CustomUserDetailsServiceImplementation implements CustomUserDetails
     }
 
     @Override
-    public List<UserEntity> userList() {
-        return userRepository.findAll();
+    public List<UserDto> userList() {
+        return userRepository.findAll().stream()
+                .map(EntityToDto::userEntityToDto)
+                .toList();
     }
 
     @Override
-    public void addNewUser(UserEntity user) { userRepository.save(user); }
+    public void addNewUser(UserDto userDto) {
+        UserEntity user = DtoToEntity.userDtoToEntity(userDto);
+        userRepository.save(user);
+    }
 
+    @Override
+    public List<UserDto> getUsersByName(String name) {
+        return userRepository.getUsersByName(name)
+                .stream()
+                .map(EntityToDto::userEntityToDto)
+                .toList();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return Optional.ofNullable(userRepository.findByUserName(username))
+                .orElseThrow(() -> new UsernameNotFoundException("Username was not found!"));
+    }
+
+    @Override
+    public List<UserDto> getProjectsByUserId(UUID userId) {
+        return userRepository.getProjectsByUserId(userId)
+                .stream()
+                .map(EntityToDto::userEntityToDto)
+                .toList();
+    }
 }
