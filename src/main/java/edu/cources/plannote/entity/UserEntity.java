@@ -46,7 +46,7 @@ public class UserEntity implements UserDetails {
     private UserStatusEntity userStatus;
 
     @ManyToMany(mappedBy = "users")
-    private Set<ProjectEntity> projects;
+    private List<ProjectEntity> projects;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userTask")
     private Set<TaskEntity> tasks;

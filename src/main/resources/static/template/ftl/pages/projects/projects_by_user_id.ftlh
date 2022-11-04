@@ -6,8 +6,8 @@
         </tr>
         <#list model["userList"] as user>
             <tr>
-                <td><a href=""><#list user.projectId as ids>${ids}<br/></#list></a></td>
-                <td><a href=""><#list user.projectName as names>${names}<br/></#list></a></td>
+                <td><#list user.projectId as ids><a href="/projects/my-projects/${ids}"><button>Go!</button></a><br/></#list></td>
+                <td><#list user.projectName as names><a href="">${names}</a><br/></#list></a></td>
             </tr>
         </#list>
     </table>

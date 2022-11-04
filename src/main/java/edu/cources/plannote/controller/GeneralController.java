@@ -10,23 +10,14 @@ import edu.cources.plannote.entity.UserStatusEntity;
 import edu.cources.plannote.service.CustomUserDetailsService;
 import edu.cources.plannote.service.PlannoteService;
 import edu.cources.plannote.service.ProjectService;
-import org.apache.catalina.User;
-import org.springframework.boot.Banner;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 public class GeneralController {
@@ -105,7 +96,7 @@ public class GeneralController {
         return "/pages/projects/add_project";
     }
 
-    @GetMapping(value = "/projects/my-projects")
+    @GetMapping(value = "/my-projects")
     public String findProjectsByUserId(
             @AuthenticationPrincipal UserEntity user,
             @ModelAttribute("model") ModelMap model) {
@@ -114,22 +105,15 @@ public class GeneralController {
         return "/pages/projects/projects_by_user_id";
     }
 
-//    @GetMapping(value = "/projects/my-projects/{project-id}")
-//    public ModelAndView openMyProject(
-//            @PathVariable(value = "project-id") String projectId,
-//            @ModelAttribute("model") ModelMap model) {
-//        model.addAttribute("project-id", projectId);
-//        return new ModelAndView("/pages/projects/my_project");
-//    }
-
-//    @GetMapping(value = "/testing")
-//    @ResponseBody
-//    public String projectByUserId(
-//            @AuthenticationPrincipal UserEntity user,
-//            @ModelAttribute("model") ModelMap model) {
-//        List<UUID> projectDtos = projectService.getProjectsByUserId(user.getIdentifier());
-//        return projectDtos.toString();
-//    }
+    @GetMapping(value = "/projects/my-projects/{project-id}")
+    @ResponseBody
+    public ModelAndView openMyProject(
+            @RequestHeader(value = "project-id") String id,
+            @PathVariable(value = "project-id") String projectId,
+            @ModelAttribute("model") ModelMap model) {
+        model.addAttribute("project-id", projectId);
+        return new ModelAndView("/pages/projects/my_project");
+    }
 
     @GetMapping(value = "/users/find-users-by-name")
     public ModelAndView findUsersByUsername(

@@ -71,9 +71,9 @@ public class EntityToDto {
         return stream.iterator();
     }
 
-    private static Set<String> getProjectNames(UserEntity user) {
+    private static List<String> getProjectNames(UserEntity user) {
         Iterator<ProjectEntity> iterator = getProjectEntityIterator(user);
-        Set<String> names = new TreeSet<>();
+        List<String> names = new ArrayList<>();
         while (iterator.hasNext()) {
             names.add(iterator.next().getProjectName());
         }
@@ -81,9 +81,9 @@ public class EntityToDto {
         return names;
     }
 
-    private static Set<UUID> getProjectsId(UserEntity user) {
+    private static List<UUID> getProjectsId(UserEntity user) {
         Iterator<ProjectEntity> iterator = getProjectEntityIterator(user);
-        Set<UUID> ids = new TreeSet<>();
+        List<UUID> ids = new ArrayList<>();
         while (iterator.hasNext()) {
             ids.add(iterator.next().getProjectId());
         }

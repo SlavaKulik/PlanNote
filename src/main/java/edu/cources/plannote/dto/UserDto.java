@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,11 +33,11 @@ public class UserDto {
 
     private UserStatusEntity userStatus;
 
-    private Set<ProjectEntity> projects;
+    private List<ProjectEntity> projects;
 
-    private Set<String> projectName;
+    private List<String> projectName;
 
-    private Set<UUID> projectId;
+    private List<UUID> projectId;
 
     private Set<TaskEntity> tasks;
 }
