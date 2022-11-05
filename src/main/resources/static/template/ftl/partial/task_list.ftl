@@ -1,14 +1,15 @@
 <#macro tasks>
     <table class="datatable">
         <tr>
-            <th>task_name</th> <th>project_name</th> <th>user_name</th> <th>task_status</th> <th>time_from</th>
-            <th>time_till</th> <th>task_label</th> <th>task_priority</th>
+            <th>Task name</th> <th>Project name</th> <th>User name</th> <th>Task status</th> <th>Time from</th>
+            <th>Time to</th> <th>Task label</th> <th>Task priority</th> <th>Task transactions</th> <th>Subtasks</th>
         </tr>
         <#list model["taskList"] as task>
             <tr>
                 <td>${task.taskName}</td> <td>${task.projectTask}</td> <td>${task.userTask}</td>
-                <td>${task.taskStatus}</td> <td>${task.taskTimeStart}</td> <td>${task.taskTimeEnd}</td>
-                <td>${task.taskLabel}</td> <td>${task.taskPriority}</td>
+                <td>${task.statusTask}</td> <td>${task.startTime}</td> <td>${task.endTime}</td>
+                <td>${task.labelTask}</td> <td>${task.priorityTask}</td> <td>${task.transactions}</td>
+                <td>${task.subtasks}</td>
             </tr>
         </#list>
     </table>

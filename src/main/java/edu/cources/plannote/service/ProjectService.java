@@ -6,6 +6,7 @@ import edu.cources.plannote.entity.ProjectEntity;
 import edu.cources.plannote.entity.SubtaskEntity;
 import edu.cources.plannote.entity.TaskEntity;
 import edu.cources.plannote.entity.UserEntity;
+import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
@@ -34,9 +35,13 @@ public interface ProjectService {
 
     void changeTask(UUID id, String newName);
 
-    List<ProjectEntity> projectList();
+    List<TaskDto> findTasksByProjectId(UUID projectId);
+
+//    List<ProjectEntity> projectList();
 
     void createNewProject(ProjectDto project);
+
+    void addUserToProject(String userName, UUID projectId);
 
 //    List<UUID> getProjectsByUserId(UUID id);
 }

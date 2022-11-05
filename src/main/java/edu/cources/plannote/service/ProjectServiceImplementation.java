@@ -31,8 +31,8 @@ public class ProjectServiceImplementation implements ProjectService{
         this.subtaskRepository = subtaskRepository;
         this.taskRepository = taskRepository;
     }
-    @Override
-    public List<ProjectEntity> projectList() { return projectRepository.findAll(); }
+//    @Override
+//    public List<ProjectEntity> projectList() { return projectRepository.findAll(); }
 
     @Override
     public void createNewProject(ProjectDto projectDto) {
@@ -40,7 +40,12 @@ public class ProjectServiceImplementation implements ProjectService{
         projectRepository.save(project);
     }
 
-//    @Override
+    @Override
+    public void addUserToProject(String userName, UUID projectId) {
+        projectRepository.addUserToProject(userName, projectId);
+    }
+
+    //    @Override
 //    public List<UUID> getProjectsByUserId(UUID id) {
 //        return projectRepository.getProjectsByUserId(id);
 //    }
@@ -80,4 +85,11 @@ public class ProjectServiceImplementation implements ProjectService{
 
     @Override
     public void changeTask(UUID id, String newName) { taskRepository.changeTask(id, newName); }
+
+    @Override
+    public List<TaskDto> findTasksByProjectId(UUID projectId) {
+        return taskRepository.findTasksByProjectId(projectId).stream()
+                .map(EntityToDto::taskEntityToDto)
+                .toList();
+    }
 }

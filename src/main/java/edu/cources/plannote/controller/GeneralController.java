@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 public class GeneralController {
@@ -105,14 +106,25 @@ public class GeneralController {
         return "/pages/projects/projects_by_user_id";
     }
 
-    @GetMapping(value = "/projects/my-projects/{project-id}")
-    @ResponseBody
+    @GetMapping(value = "/projects/my-projects/{projectId}")
     public ModelAndView openMyProject(
-            @RequestHeader(value = "project-id") String id,
-            @PathVariable(value = "project-id") String projectId,
+            @PathVariable(value = "projectId") String projectId,
             @ModelAttribute("model") ModelMap model) {
-        model.addAttribute("project-id", projectId);
-        return new ModelAndView("/pages/projects/my_project");
+        UUID id = UUID.fromString(projectId);
+        List<TaskDto> tasks = projectService.findTasksByProjectId(id);
+        model.addAttribute("taskList", tasks);
+        return new ModelAndView("/pages/tasks/all_tasks", model);
+    }
+
+    @PostMapping(value = "/projects/my-projects/{projectId}")
+    public String addUserToProject(
+            @PathVariable(value = "projectId") String project,
+            @RequestParam(value = "userName") String user,
+            @ModelAttribute("model") ModelMap model) {
+        UUID projectId = UUID.fromString(project);
+        projectService.addUserToProject(user, projectId);
+        model.addAttribute("projectId", projectId);
+        return "/pages/tasks/all_tasks";
     }
 
     @GetMapping(value = "/users/find-users-by-name")
