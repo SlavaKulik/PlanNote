@@ -1,7 +1,10 @@
 package edu.cources.plannote.service;
 
+import edu.cources.plannote.dto.TransactionDto;
 import edu.cources.plannote.entity.*;
 import edu.cources.plannote.repository.*;
+import edu.cources.plannote.utils.DtoToEntity;
+import edu.cources.plannote.utils.EntityToDto;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,7 +15,6 @@ import java.util.UUID;
 public class PlannoteServiceImplementation implements PlannoteService{
 
     private final AccountStatusRepository accountStatusRepository;
-    private final LabelRepository labelRepository;
     private final PriorityRepository priorityRepository;
     private final ScoreRepository scoreRepository;
     private final StatusRepository statusRepository;
@@ -20,14 +22,12 @@ public class PlannoteServiceImplementation implements PlannoteService{
     private final UserStatusRepository userStatusRepository;
 
     public PlannoteServiceImplementation(AccountStatusRepository accountStatusRepository,
-                                         LabelRepository labelRepository,
                                          PriorityRepository priorityRepository,
                                          ScoreRepository scoreRepository,
                                          StatusRepository statusRepository,
                                          TransactionRepository transactionRepository,
                                          UserStatusRepository userStatusRepository) {
         this.accountStatusRepository = accountStatusRepository;
-        this.labelRepository = labelRepository;
         this.priorityRepository = priorityRepository;
         this.scoreRepository = scoreRepository;
         this.statusRepository = statusRepository;
@@ -39,14 +39,6 @@ public class PlannoteServiceImplementation implements PlannoteService{
     public List<AccountStatusEntity> accountStatusList() {
         return accountStatusRepository.findAll();
     }
-
-    @Override
-    public List<LabelEntity> labelList() {
-        return labelRepository.findAll();
-    }
-
-    @Override
-    public void addNewLabel(LabelEntity label) { labelRepository.save(label); }
 
     @Override
     public List<PriorityEntity> priorityList() { return priorityRepository.findAll(); }
@@ -67,7 +59,24 @@ public class PlannoteServiceImplementation implements PlannoteService{
     }
 
     @Override
-    public void addNewTransaction(TransactionEntity transaction) { transactionRepository.save(transaction); }
+    public void addNewTransaction(TransactionDto transaction) {
+        TransactionEntity transactionEntity = DtoToEntity.transactionDtoToEntity(transaction);
+        transactionRepository.save(transactionEntity);
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionsByTaskId(UUID taskId) {
+        return transactionRepository.getTransactionsByTaskId(taskId).stream()
+                .map(EntityToDto::transactionEntityToDto)
+                .toList();
+    }
+
+    @Override
+    public List<TransactionDto> getMoneyFlowSumByTaskId(UUID taskId) {
+        return transactionRepository.getMoneyFlowSumByTaskId(taskId).stream()
+                .map(EntityToDto::transactionEntityToDto)
+                .toList();
+    }
 
     @Override
     public void deleteTransaction(TransactionEntity transaction) { transactionRepository.delete(transaction); }

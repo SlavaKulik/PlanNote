@@ -2,10 +2,7 @@ package edu.cources.plannote.service;
 
 import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.dto.TaskDto;
-import edu.cources.plannote.entity.ProjectEntity;
-import edu.cources.plannote.entity.SubtaskEntity;
-import edu.cources.plannote.entity.TaskEntity;
-import edu.cources.plannote.entity.UserEntity;
+import edu.cources.plannote.entity.*;
 import edu.cources.plannote.repository.ProjectRepository;
 import edu.cources.plannote.repository.SubtaskRepository;
 import edu.cources.plannote.repository.TaskRepository;
@@ -14,8 +11,8 @@ import edu.cources.plannote.utils.EntityToDto;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -78,13 +75,24 @@ public class ProjectServiceImplementation implements ProjectService{
     }
 
     @Override
-    public void addNewTask(TaskEntity task) { taskRepository.save(task); }
+    public void addNewTask(TaskDto task) {
+        TaskEntity newTask = DtoToEntity.taskDtoToEntity(task);
+        taskRepository.save(newTask); }
 
     @Override
-    public void deleteTask(TaskEntity task) { taskRepository.delete(task); }
+    public void changeTaskName(UUID id, String newName) { taskRepository.changeTaskName(id, newName); }
 
     @Override
-    public void changeTask(UUID id, String newName) { taskRepository.changeTask(id, newName); }
+    public void changeTaskStatus(UUID id, StatusEntity newStatus) { taskRepository.changeTaskStatus(id, newStatus); }
+
+    @Override
+    public void changeTaskTimeFrom(UUID id, LocalDateTime newTime) { taskRepository.changeTaskTimeFrom(id, newTime); }
+
+    @Override
+    public void changeTaskTimeEnd(UUID id, LocalDateTime newTime) { taskRepository.changeTaskTimeEnd(id, newTime); }
+
+    @Override
+    public void changeTaskPriority(UUID id, PriorityEntity newPriority) { taskRepository.changeTaskPriority(id, newPriority); }
 
     @Override
     public List<TaskDto> findTasksByProjectId(UUID projectId) {
@@ -92,4 +100,23 @@ public class ProjectServiceImplementation implements ProjectService{
                 .map(EntityToDto::taskEntityToDto)
                 .toList();
     }
+
+    @Override
+    public List<TaskDto> findTasksByProjectIdAndUserId(UUID projectId, UUID userId) {
+        return taskRepository.findTasksByProjectIdAndUserId(projectId, userId).stream()
+                .map(EntityToDto::taskEntityToDto)
+                .toList();
+    }
+
+    @Override
+    public String getProjectNameById(UUID projectId) {
+        return projectRepository.getProjectNameById(projectId);
+    }
+
+    //    @Override
+//    public List<TaskDto> findTasksByProjectName(UUID userId, String projectName) {
+//        return taskRepository.findTasksByProjectName(userId, projectName).stream()
+//                .map(EntityToDto::taskEntityToDto)
+//                .toList();
+//    }
 }

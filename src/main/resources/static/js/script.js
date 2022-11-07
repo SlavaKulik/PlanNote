@@ -60,7 +60,7 @@ function createTodo() {
     const todo_div = document.createElement("div");
     const input_val = document.getElementById("todo_input").value;
     const txt = document.createTextNode(input_val);
-    const no_status = document.getElementById("no_status");
+    const no_status = document.getElementById("to_do");
 
     todo_div.appendChild(txt);
     todo_div.classList.add("todo");

@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,21 +38,17 @@ public class TaskEntity {
     private StatusEntity taskStatus;
 
     @Column(name = "task_time_start")
-    private Instant taskTimeStart;
+    private LocalDateTime taskTimeStart;
 
     @Column(name = "task_time_end")
-    private Instant taskTimeEnd;
-
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "label_task_id")
-    private LabelEntity taskLabel;
+    private LocalDateTime taskTimeEnd;
 
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "priority_task_id")
     private PriorityEntity taskPriority;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskTransaction")
-    private Set<TransactionEntity> transactions;
+    private List<TransactionEntity> transactions;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskSubtask")
     private Set<SubtaskEntity> subtasks;

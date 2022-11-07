@@ -15,4 +15,5 @@
             <input type="reset" value="  Clear  " />
         </form>
     </fieldset>
+    <a href="/login">Login after registration</a>
 </@layout.page>

@@ -1,8 +1,3 @@
-create table if not exists label_list (
-    label_id varchar not null,
-    primary key (label_id)
-);
-
 create table if not exists project_list (
     id uuid default uuid_generate_v4 (),
     project_name varchar not null,

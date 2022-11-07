@@ -3,6 +3,8 @@ package edu.cources.plannote.repository;
 import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.entity.ProjectEntity;
 import edu.cources.plannote.entity.UserEntity;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +27,8 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
     @Transactional
     void addUserToProject(@Param("userName") String userName, @Param("projectId") UUID projectId);
 
+    @Query(value = "select project.projectName from ProjectEntity project where project.projectId = :projectId")
+    String getProjectNameById(@Param("projectId") UUID projectId);
 //    @Modifying
 //    @Transactional
 //    @Query(value = "update ProjectEntity project set project.users = :newUser where project.projectId = :projectId")

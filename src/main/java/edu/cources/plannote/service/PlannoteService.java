@@ -1,6 +1,8 @@
 package edu.cources.plannote.service;
 
+import edu.cources.plannote.dto.TransactionDto;
 import edu.cources.plannote.entity.*;
+import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
@@ -8,10 +10,6 @@ import java.util.UUID;
 
 public interface PlannoteService {
     List<AccountStatusEntity> accountStatusList();
-
-    List<LabelEntity> labelList();
-
-    void addNewLabel(LabelEntity label);
 
     List<PriorityEntity> priorityList();
 
@@ -21,7 +19,11 @@ public interface PlannoteService {
 
     List<TransactionEntity> transactionList();
 
-    void addNewTransaction(TransactionEntity transaction);
+    void addNewTransaction(TransactionDto transaction);
+
+    List<TransactionDto> getTransactionsByTaskId(UUID taskId);
+
+    List<TransactionDto> getMoneyFlowSumByTaskId(UUID taskId);
 
     void deleteTransaction(TransactionEntity transaction);
 

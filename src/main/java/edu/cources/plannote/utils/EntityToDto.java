@@ -1,14 +1,9 @@
 package edu.cources.plannote.utils;
 
-import edu.cources.plannote.dto.ProjectDto;
-import edu.cources.plannote.dto.SubtaskDto;
-import edu.cources.plannote.dto.TaskDto;
-import edu.cources.plannote.dto.UserDto;
-import edu.cources.plannote.entity.ProjectEntity;
-import edu.cources.plannote.entity.SubtaskEntity;
-import edu.cources.plannote.entity.TaskEntity;
-import edu.cources.plannote.entity.UserEntity;
+import edu.cources.plannote.dto.*;
+import edu.cources.plannote.entity.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,15 +24,15 @@ public class EntityToDto {
         return TaskDto.builder()
                 .id(String.valueOf(task.getTaskId()))
                 .taskName(task.getTaskName())
-                .projectTask(task.getProjectTask())
-                .userTask(task.getUserTask())
-                .statusTask(task.getTaskStatus())
-                .startTime(String.valueOf(task.getTaskTimeStart()))
-                .endTime(String.valueOf(task.getTaskTimeEnd()))
-                .labelTask(task.getTaskLabel())
-                .priorityTask(task.getTaskPriority())
+                .projectTask(task.getProjectTask().getProjectName())
+                .userTask(task.getUserTask().getUsername())
+                .statusTask(task.getTaskStatus().getStatusId())
+                .startTime(String.valueOf(task.getTaskTimeStart()).replace("T", " "))
+                .endTime(String.valueOf(task.getTaskTimeEnd()).replace("T", " "))
+                .priorityTask(task.getTaskPriority().getPriorityId())
                 .transactions(task.getTransactions())
                 .subtasks(task.getSubtasks())
+                .sum(transactionsSum(task.getTransactions()))
                 .build();
     }
     public static SubtaskDto subtaskEntityToDto(SubtaskEntity subtask) {
@@ -47,6 +42,15 @@ public class EntityToDto {
                 .task(subtask.getTaskSubtask())
                 .startTime(String.valueOf(subtask.getSubtaskTimeStart()))
                 .endTime(String.valueOf(subtask.getSubtaskTimeEnd()))
+                .build();
+    }
+
+    public static TransactionDto transactionEntityToDto(TransactionEntity transaction) {
+        return TransactionDto.builder()
+                .transactionId(String.valueOf(transaction.getTransactionId()))
+                .transactionName(transaction.getTransactionName())
+                .transactionMoneyFlow(String.valueOf(transaction.getTransactionMoneyFlow()))
+                .task(transaction.getTaskTransaction())
                 .build();
     }
     public static UserDto userEntityToDto(UserEntity user) {
@@ -88,6 +92,20 @@ public class EntityToDto {
             ids.add(iterator.next().getProjectId());
         }
         return ids;
+    }
+
+    private static String transactionsSum(List<TransactionEntity> transactions) {
+        List<BigDecimal> numbers = new ArrayList<>();
+        Stream<TransactionEntity> stream = transactions.stream();
+        Iterator<TransactionEntity> iterator = stream.iterator();
+        BigDecimal sum = BigDecimal.ZERO;
+        while(iterator.hasNext()) {
+            numbers.add(iterator.next().getTransactionMoneyFlow());
+        }
+        for (BigDecimal number : numbers) {
+            sum = sum.add(number);
+        }
+        return sum.toString();
     }
 
  }

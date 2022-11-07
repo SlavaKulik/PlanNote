@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -17,21 +18,33 @@ public class TaskDto {
 
     private String taskName;
 
-    private ProjectEntity projectTask;
+    private String projectTask;
 
-    private UserEntity userTask;
+    private ProjectEntity project;
 
-    private StatusEntity statusTask;
+    private String userTask;
+
+    private UserEntity user;
+
+    private String statusTask;
+
+    private StatusEntity status;
 
     private String startTime;
 
     private String endTime;
 
-    private LabelEntity labelTask;
+    private String priorityTask;
 
-    private PriorityEntity priorityTask;
+    private PriorityEntity priority;
 
-    private Set<TransactionEntity> transactions;
+    private List<TransactionEntity> transactions;
+
+    private List<String> transactionsName;
+
+    private List<String> transactionsMoney;
 
     private Set<SubtaskEntity> subtasks;
+
+    private String sum;
 }

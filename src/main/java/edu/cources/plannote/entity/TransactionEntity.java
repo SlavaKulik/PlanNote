@@ -1,7 +1,6 @@
 package edu.cources.plannote.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,6 +9,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transaction_list")
 public class TransactionEntity {
     @Id
@@ -25,5 +27,5 @@ public class TransactionEntity {
 
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "task_transaction_id")
-    private ProjectEntity taskTransaction;
+    private TaskEntity taskTransaction;
 }

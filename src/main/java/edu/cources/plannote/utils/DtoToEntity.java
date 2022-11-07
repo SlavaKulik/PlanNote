@@ -1,14 +1,11 @@
 package edu.cources.plannote.utils;
 
-import edu.cources.plannote.dto.ProjectDto;
-import edu.cources.plannote.dto.SubtaskDto;
-import edu.cources.plannote.dto.TaskDto;
-import edu.cources.plannote.dto.UserDto;
-import edu.cources.plannote.entity.ProjectEntity;
-import edu.cources.plannote.entity.SubtaskEntity;
-import edu.cources.plannote.entity.TaskEntity;
-import edu.cources.plannote.entity.UserEntity;
+import edu.cources.plannote.dto.*;
+import edu.cources.plannote.entity.*;
+
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class DtoToEntity {
 
@@ -22,13 +19,12 @@ public class DtoToEntity {
     public static TaskEntity taskDtoToEntity(TaskDto taskData) {
         return TaskEntity.builder()
                 .taskName(taskData.getTaskName())
-                .projectTask(taskData.getProjectTask())
-                .userTask(taskData.getUserTask())
-                .taskStatus(taskData.getStatusTask())
-                .taskTimeStart(Instant.parse(taskData.getStartTime()))
-                .taskTimeEnd(Instant.parse(taskData.getEndTime()))
-                .taskLabel(taskData.getLabelTask())
-                .taskPriority(taskData.getPriorityTask())
+                .projectTask(taskData.getProject())
+                .userTask(taskData.getUser())
+                .taskStatus(taskData.getStatus())
+                .taskTimeStart(LocalDateTime.parse(taskData.getStartTime()))
+                .taskTimeEnd(LocalDateTime.parse(taskData.getEndTime()))
+                .taskPriority(taskData.getPriority())
                 .transactions(taskData.getTransactions())
                 .subtasks(taskData.getSubtasks())
                 .build();
@@ -53,6 +49,14 @@ public class DtoToEntity {
                 .userStatus(userData.getUserStatus())
                 .userRole(userData.getUserRole())
                 .tasks(userData.getTasks())
+                .build();
+    }
+
+    public static TransactionEntity transactionDtoToEntity(TransactionDto transactionData) {
+        return TransactionEntity.builder()
+                .transactionName(transactionData.getTransactionName())
+                .transactionMoneyFlow(BigDecimal.valueOf(Double.parseDouble(transactionData.getTransactionMoneyFlow())))
+                .taskTransaction(transactionData.getTask())
                 .build();
     }
 }
