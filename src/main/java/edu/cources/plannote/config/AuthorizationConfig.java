@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -15,18 +16,24 @@ import org.springframework.security.web.SecurityFilterChain;
 public class AuthorizationConfig {
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring()
-                .antMatchers( "/registration"));
-    }
-
-    @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .formLogin().and()
-                .csrf().disable();
+        httpSecurity.authorizeHttpRequests()
+                .antMatchers("/", "/home", "/registration")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/my-projects", true)
+                .failureUrl("/login?error")
+                .usernameParameter("username")
+                .permitAll()
+                .and().csrf().disable();
         return httpSecurity.build();
     }
+
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }

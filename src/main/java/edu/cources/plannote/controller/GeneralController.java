@@ -6,7 +6,10 @@ import edu.cources.plannote.service.CustomUserDetailsService;
 import edu.cources.plannote.service.PlannoteService;
 import edu.cources.plannote.service.ProjectService;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,13 +51,13 @@ public class GeneralController {
         return new ModelAndView("/pages/users/all_users", model);
     }
 
-    @GetMapping(value = "/users/all-users")
-    public String allUsers(@ModelAttribute("model") ModelMap model) {
-        List<UserDto> users = customUserDetailsService.userList();
-        model.addAttribute("userList", users);
-        return "/pages/users/all_users";
-    }
-
+//    @GetMapping(value = "/users/all-users")
+//    public String allUsers(@ModelAttribute("model") ModelMap model) {
+//        List<UserDto> users = customUserDetailsService.userList();
+//        model.addAttribute("userList", users);
+//        return "/pages/users/all_users";
+//    }
+//
     @GetMapping(value = "/registration")
     public String registration(){ return "/pages/users/add_user"; }
 
@@ -76,6 +80,17 @@ public class GeneralController {
                 .build();
         customUserDetailsService.addNewUser(userDto);
         return "redirect:/logout";
+    }
+
+    @GetMapping("/login")
+    public ModelAndView login(
+            @RequestParam Optional<String> error) {
+        String errorIsPresent = "The username or password you have entered is invalid, try again.";
+        String errorIsNotPresent = "";
+        if (error.isEmpty()) {
+            return new ModelAndView("/pages/login", "error", errorIsNotPresent);
+        }
+        else return new ModelAndView("/pages/login", "error", errorIsPresent);
     }
 
     @GetMapping(value = "/my-projects/add-projects")
