@@ -1,6 +1,7 @@
 package edu.cources.plannote.service;
 
 import edu.cources.plannote.dto.ProjectDto;
+import edu.cources.plannote.dto.SubtaskDto;
 import edu.cources.plannote.dto.TaskDto;
 import edu.cources.plannote.entity.*;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,15 +18,15 @@ public interface ProjectService {
 
     List<SubtaskEntity> subtaskList();
 
-    void addNewSubtask(SubtaskEntity subtask);
+    void addNewSubtask(SubtaskDto subtask);
 
-    void deleteSubtask(SubtaskEntity subtask);
+    List<SubtaskDto> findSubtasksByTaskId(UUID taskId);
 
     void changeSubtaskName(UUID id, String newName);
 
-    void changeSubtaskStartTime(UUID id, Instant newTime);
+    void changeSubtaskStartTime(UUID id, LocalDateTime newTime);
 
-    void changeSubtaskEndTime(UUID id, Instant newTime);
+    void changeSubtaskEndTime(UUID id, LocalDateTime newTime);
 
     List<TaskDto> taskList();
 
@@ -43,9 +44,6 @@ public interface ProjectService {
 
     List<TaskDto> findTasksByProjectId(UUID projectId);
 
-//    List<TaskDto> findTasksByProjectName(UUID userId, String projectName);
-
-//    List<ProjectEntity> projectList();
 
     List<TaskDto> findTasksByProjectIdAndUserId(UUID projectId, UUID userId);
 
@@ -54,6 +52,4 @@ public interface ProjectService {
     void addUserToProject(String userName, UUID projectId);
 
     String getProjectNameById(UUID projectId);
-
-//    List<UUID> getProjectsByUserId(UUID id);
 }

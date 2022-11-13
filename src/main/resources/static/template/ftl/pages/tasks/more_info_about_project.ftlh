@@ -1,9 +1,19 @@
 <#import "../../layouts/main.ftl" as layout>
 <@layout.page>
-    <table class="datatable">
+    <link rel="stylesheet" href="../../../../css/style.css">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/add-transaction">Add transaction</a>
+                <a class="nav-item nav-link" href="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}/add-subtask</#if>">Create subtasks</a>
+                <a class="nav-item nav-link" href="/my-projects/<#if projectId??>${projectId}</#if>/tasks">Return to tasks</a>
+            </div>
+        </div>
+    </nav>
+    <table class="table">
         <tr>
-            <th>Name</th>
-            <th>Money flow</th>
+            <th scope="col">Name</th>
+            <th scope="col">Money flow</th>
         </tr>
         <#list model["transactionList"] as transactions>
             <tr>
@@ -12,6 +22,36 @@
             </tr>
         </#list>
     </table>
-    <p><a href="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/add-transaction">Add transaction</a></p>
-    <p><a href="/my-projects/<#if projectId??>${projectId}</#if>/tasks">Return to tasks</a></p>
+    <table class="table">
+        <tr>
+            <th scope="row">Name</th>
+            <th scope="row">Time from</th>
+            <th scope="col">Time till</th>
+        </tr>
+        <#list model["subtaskList"] as subtasks>
+            <tr>
+                <td>
+                    ${subtasks.subtaskName}
+                    <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/${subtasks.id}/edit-name" method="post">
+                        <input class="form-control" id="exampleFormControlInput1" type="text" name="subtaskName">
+                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
+                    </form>
+                </td>
+                <td>
+                    ${subtasks.startTime}
+                    <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/${subtasks.id}/edit-start-time" method="post">
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="startTime" required/>
+                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
+                    </form>
+                </td>
+                <td>
+                    ${subtasks.endTime}
+                    <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/${subtasks.id}/edit-end-time" method="post">
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="endTime" required/>
+                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
+                    </form>
+                </td>
+            </tr>
+        </#list>
+    </table>
 </@layout.page>

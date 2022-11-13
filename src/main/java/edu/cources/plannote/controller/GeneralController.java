@@ -1,9 +1,6 @@
 package edu.cources.plannote.controller;
 
-import edu.cources.plannote.dto.ProjectDto;
-import edu.cources.plannote.dto.TaskDto;
-import edu.cources.plannote.dto.TransactionDto;
-import edu.cources.plannote.dto.UserDto;
+import edu.cources.plannote.dto.*;
 import edu.cources.plannote.entity.*;
 import edu.cources.plannote.service.CustomUserDetailsService;
 import edu.cources.plannote.service.PlannoteService;
@@ -40,20 +37,6 @@ public class GeneralController {
         this.projectService = projectService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
-//    @RequestMapping("/hello")
-//    @ResponseBody
-//    public String helloWorld() { return "Hello World!"; }
-
-
-//
-//    @GetMapping(value = "/users/current-user")
-//    @ResponseBody
-//    public String currentUser(
-//            @AuthenticationPrincipal UserEntity user,
-//            @ModelAttribute("model") ModelMap model) {
-//        return user.getIdentifier().toString();
-//    }
 
     @GetMapping(value = "/users/find-users-by-name")
     public ModelAndView findUsersByUsername(
@@ -92,7 +75,7 @@ public class GeneralController {
                 .userRole("ROLE_USER")
                 .build();
         customUserDetailsService.addNewUser(userDto);
-        return "index";
+        return "redirect:/logout";
     }
 
     @GetMapping(value = "/my-projects/add-projects")
@@ -141,13 +124,6 @@ public class GeneralController {
         return "/pages/tasks/assign_user_to_project";
     }
 
-//    @GetMapping(value = "/tasks/all")
-//    public String allTasks(@ModelAttribute("model") ModelMap model) {
-//        List<TaskDto> tasks = projectService.taskList();
-//        model.addAttribute("taskList", tasks);
-//        return "/pages/tasks/all_tasks";
-//    }
-
     @GetMapping(value = "/my-projects/{projectId}/tasks")
     public ModelAndView createNewTask(
             @ModelAttribute("model") ModelMap model,
@@ -186,7 +162,7 @@ public class GeneralController {
         projectService.addNewTask(taskDto);
         String projectName = projectService.getProjectNameById(project);
         List<TaskDto> tasks = projectService.findTasksByProjectIdAndUserId(project, user.getIdentifier());
-        model.addAttribute("projectId", projectTask);
+        model.addAttribute("projectId", projectTask.getProjectId());
         model.addAttribute("projectName", projectName);
         model.addAttribute("userName", user.getUsername());
         model.addAttribute("taskList", tasks);
@@ -277,7 +253,9 @@ public class GeneralController {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
         List<TransactionDto> transactions = plannoteService.getTransactionsByTaskId(taskId);
+        List<SubtaskDto> subtasks = projectService.findSubtasksByTaskId(taskId);
         model.addAttribute("transactionList", transactions);
+        model.addAttribute("subtaskList", subtasks);
         model.addAttribute("taskId", taskId);
         model.addAttribute("projectId", projectId);
         return new ModelAndView("/pages/tasks/more_info_about_project", model);
@@ -299,6 +277,7 @@ public class GeneralController {
             @RequestParam("transactionMoneyFlow") String transactionMoneyFlow) {
         TaskEntity taskEntity = new TaskEntity();
         UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
         taskEntity.setTaskId(taskId);
         TransactionDto transactionDto = TransactionDto.builder()
                 .transactionName(transactionName)
@@ -306,20 +285,92 @@ public class GeneralController {
                 .task(taskEntity)
                 .build();
         plannoteService.addNewTransaction(transactionDto);
-        UUID projectId = UUID.fromString(project);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("/pages/tasks/add_transaction", model);
     }
 
-    //    @GetMapping(value = "/projects/my-projects/{projectName}")
-//    public ModelAndView openMyProjectFromName(
-//            @PathVariable(value = "projectName") String projectName,
-//            @AuthenticationPrincipal UserEntity user,
-//            @ModelAttribute("model") ModelMap model) {
-//        List<TaskDto> tasks = projectService.findTasksByProjectName(user.getIdentifier(), projectName.replace("%20"," "));
-//        model.addAttribute("taskList", tasks);
-//        return new ModelAndView("/pages/tasks/all_tasks", model);
-//    }
+    @GetMapping(value = "/my-projects/{projectId}/tasks/{taskId}/add-subtask")
+    public String addNewSubtask(
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task) {
+        return "/pages/subtasks/add_subtask";
+    }
 
+    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/add-subtask")
+    public ModelAndView addNewSubtask(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task,
+            @RequestParam("subtaskName") String subtaskName,
+            @RequestParam("startTime") String startTime,
+            @RequestParam("endTime") String endTime) {
+        UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setTaskId(taskId);
+        SubtaskDto subtaskDto = SubtaskDto.builder()
+                .task(taskEntity)
+                .subtaskName(subtaskName)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
+        projectService.addNewSubtask(subtaskDto);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        return new ModelAndView("/pages/subtasks/add_subtask", model);
+    }
+
+    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-name")
+    public ModelAndView updateSubtaskName(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task,
+            @PathVariable("subtaskId") String subtask,
+            @RequestParam("subtaskName") String subtaskName) {
+        UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
+        UUID subtaskId = UUID.fromString(subtask);
+        projectService.changeSubtaskName(subtaskId, subtaskName);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        model.addAttribute("subtasksId", subtaskId);
+        return new ModelAndView("redirect:/my-projects/{projectId}/tasks/{taskId}", model);
+    }
+
+    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-start-time")
+    public ModelAndView updateSubtaskTimeFrom(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task,
+            @PathVariable("subtaskId") String subtask,
+            @RequestParam("startTime") String startTime) {
+        UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
+        UUID subtaskId = UUID.fromString(subtask);
+        LocalDateTime time = LocalDateTime.parse(startTime);
+        projectService.changeSubtaskStartTime(subtaskId, time);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        model.addAttribute("subtasksId", subtaskId);
+        return new ModelAndView("redirect:/my-projects/{projectId}/tasks/{taskId}", model);
+    }
+
+    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-end-time")
+    public ModelAndView updateSubtaskTimeTill(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task,
+            @PathVariable("subtaskId") String subtask,
+            @RequestParam("endTime") String endTime) {
+        UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
+        UUID subtaskId = UUID.fromString(subtask);
+        LocalDateTime time = LocalDateTime.parse(endTime);
+        projectService.changeSubtaskEndTime(subtaskId, time);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        model.addAttribute("subtasksId", subtaskId);
+        return new ModelAndView("redirect:/my-projects/{projectId}/tasks/{taskId}", model);
+    }
 }

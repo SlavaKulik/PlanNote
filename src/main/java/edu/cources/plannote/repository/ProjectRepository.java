@@ -19,9 +19,6 @@ import java.util.UUID;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
 
-//    @Query(value = "SELECT project_id from user_project_list WHERE user_id = :idusers",
-//                        nativeQuery = true)
-//    List<UUID> getProjectsByUserId(@Param("idusers") UUID id);
     @Modifying
     @Query(value = "INSERT INTO user_project_list VALUES((SELECT user_list.id FROM user_list WHERE user_name = :userName), :projectId)" , nativeQuery = true)
     @Transactional
@@ -29,8 +26,4 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
 
     @Query(value = "select project.projectName from ProjectEntity project where project.projectId = :projectId")
     String getProjectNameById(@Param("projectId") UUID projectId);
-//    @Modifying
-//    @Transactional
-//    @Query(value = "update ProjectEntity project set project.users = :newUser where project.projectId = :projectId")
-//    void addUserToProject(@Param("newUser") Set<UserEntity> newUser, @Param("projectId") UUID projectId);
 }

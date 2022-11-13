@@ -1,6 +1,7 @@
 package edu.cources.plannote.service;
 
 import edu.cources.plannote.dto.ProjectDto;
+import edu.cources.plannote.dto.SubtaskDto;
 import edu.cources.plannote.dto.TaskDto;
 import edu.cources.plannote.entity.*;
 import edu.cources.plannote.repository.ProjectRepository;
@@ -9,8 +10,6 @@ import edu.cources.plannote.repository.TaskRepository;
 import edu.cources.plannote.utils.DtoToEntity;
 import edu.cources.plannote.utils.EntityToDto;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +27,6 @@ public class ProjectServiceImplementation implements ProjectService{
         this.subtaskRepository = subtaskRepository;
         this.taskRepository = taskRepository;
     }
-//    @Override
-//    public List<ProjectEntity> projectList() { return projectRepository.findAll(); }
 
     @Override
     public void createNewProject(ProjectDto projectDto) {
@@ -42,30 +39,31 @@ public class ProjectServiceImplementation implements ProjectService{
         projectRepository.addUserToProject(userName, projectId);
     }
 
-    //    @Override
-//    public List<UUID> getProjectsByUserId(UUID id) {
-//        return projectRepository.getProjectsByUserId(id);
-//    }
-
     @Override
     public List<SubtaskEntity> subtaskList() {
         return subtaskRepository.findAll();
     }
 
     @Override
-    public void addNewSubtask(SubtaskEntity subtask) { subtaskRepository.save(subtask); }
+    public void addNewSubtask(SubtaskDto subtask) {
+        SubtaskEntity subtaskEntity = DtoToEntity.subtaskDtoToEntity(subtask);
+        subtaskRepository.save(subtaskEntity); }
 
     @Override
-    public void deleteSubtask(SubtaskEntity subtask) { subtaskRepository.delete(subtask); }
+    public List<SubtaskDto> findSubtasksByTaskId(UUID taskId) {
+        return subtaskRepository.findSubtasksByTaskId(taskId).stream()
+                .map(EntityToDto::subtaskEntityToDto)
+                .toList();
+    }
 
     @Override
     public void changeSubtaskName(UUID id, String newName) { subtaskRepository.changeSubtaskName(id, newName); }
 
     @Override
-    public void changeSubtaskStartTime(UUID id, Instant newTime) { subtaskRepository.changeSubtaskStartTime(id, newTime); }
+    public void changeSubtaskStartTime(UUID id, LocalDateTime newTime) { subtaskRepository.changeSubtaskStartTime(id, newTime); }
 
     @Override
-    public void changeSubtaskEndTime(UUID id, Instant newTime) { subtaskRepository.changeSubtaskEndTime(id, newTime); }
+    public void changeSubtaskEndTime(UUID id, LocalDateTime newTime) { subtaskRepository.changeSubtaskEndTime(id, newTime); }
 
     @Override
     public List<TaskDto> taskList() {
@@ -77,7 +75,8 @@ public class ProjectServiceImplementation implements ProjectService{
     @Override
     public void addNewTask(TaskDto task) {
         TaskEntity newTask = DtoToEntity.taskDtoToEntity(task);
-        taskRepository.save(newTask); }
+        taskRepository.save(newTask);
+    }
 
     @Override
     public void changeTaskName(UUID id, String newName) { taskRepository.changeTaskName(id, newName); }
@@ -113,10 +112,4 @@ public class ProjectServiceImplementation implements ProjectService{
         return projectRepository.getProjectNameById(projectId);
     }
 
-    //    @Override
-//    public List<TaskDto> findTasksByProjectName(UUID userId, String projectName) {
-//        return taskRepository.findTasksByProjectName(userId, projectName).stream()
-//                .map(EntityToDto::taskEntityToDto)
-//                .toList();
-//    }
 }

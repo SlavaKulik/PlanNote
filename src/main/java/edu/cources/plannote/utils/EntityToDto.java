@@ -40,8 +40,8 @@ public class EntityToDto {
                 .id(String.valueOf(subtask.getSubtaskId()))
                 .subtaskName(subtask.getSubtaskName())
                 .task(subtask.getTaskSubtask())
-                .startTime(String.valueOf(subtask.getSubtaskTimeStart()))
-                .endTime(String.valueOf(subtask.getSubtaskTimeEnd()))
+                .startTime(String.valueOf(subtask.getSubtaskTimeStart()).replace("T", " "))
+                .endTime(String.valueOf(subtask.getSubtaskTimeEnd()).replace("T", " "))
                 .build();
     }
 
@@ -95,15 +95,19 @@ public class EntityToDto {
     }
 
     private static String transactionsSum(List<TransactionEntity> transactions) {
-        List<BigDecimal> numbers = new ArrayList<>();
-        Stream<TransactionEntity> stream = transactions.stream();
-        Iterator<TransactionEntity> iterator = stream.iterator();
         BigDecimal sum = BigDecimal.ZERO;
-        while(iterator.hasNext()) {
-            numbers.add(iterator.next().getTransactionMoneyFlow());
-        }
-        for (BigDecimal number : numbers) {
-            sum = sum.add(number);
+        if (Objects.nonNull(transactions)) {
+            List<BigDecimal> numbers = new ArrayList<>();
+            Stream<TransactionEntity> stream = transactions.stream();
+            Iterator<TransactionEntity> iterator = stream.iterator();
+
+            while (iterator.hasNext()) {
+                numbers.add(iterator.next().getTransactionMoneyFlow());
+            }
+            for (BigDecimal number : numbers) {
+                sum = sum.add(number);
+            }
+            return sum.toString();
         }
         return sum.toString();
     }

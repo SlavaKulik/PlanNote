@@ -10,7 +10,6 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "account_status")
 public class AccountStatusEntity {

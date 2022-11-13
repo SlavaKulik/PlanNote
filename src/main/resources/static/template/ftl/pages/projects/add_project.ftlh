@@ -5,10 +5,17 @@
             Add project
         </legend>
         <form name="addProject" action="/my-projects/add-projects" method="post">
-            Name : <input type="text" name="projectName"/> <br/>
-            <input type="submit" value="  Save  " />
-            <input type="reset" value="  Clear  " />
+            <table class="table">
+                <tr>
+                    <th scope="col">Name</th>
+                </tr>
+                <tr>
+                    <td><input class="form-control" id="exampleFormControlInput1" type="text" name="projectName"/></td>
+                    <td><button type="submit" class="btn btn-primary" value="Save">Save</button>
+                        <button type="reset" class="btn btn-primary">Clear</button></td>
+                </tr>
+            </table>
         </form>
     </fieldset>
-    <a href="/my-projects">Go to my projects</a>
+    <a href="/my-projects" class="btn btn-primary" role="button">Go to my projects</a>
 </@layout.page>

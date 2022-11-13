@@ -25,7 +25,6 @@ public class DtoToEntity {
                 .taskTimeStart(LocalDateTime.parse(taskData.getStartTime()))
                 .taskTimeEnd(LocalDateTime.parse(taskData.getEndTime()))
                 .taskPriority(taskData.getPriority())
-                .transactions(taskData.getTransactions())
                 .subtasks(taskData.getSubtasks())
                 .build();
     }
@@ -34,8 +33,8 @@ public class DtoToEntity {
         return SubtaskEntity.builder()
                 .subtaskName(subtaskData.getSubtaskName())
                 .taskSubtask(subtaskData.getTask())
-                .subtaskTimeStart(Instant.parse(subtaskData.getStartTime()))
-                .subtaskTimeEnd(Instant.parse(subtaskData.getEndTime()))
+                .subtaskTimeStart(LocalDateTime.parse(subtaskData.getStartTime()))
+                .subtaskTimeEnd(LocalDateTime.parse(subtaskData.getEndTime()))
                 .build();
     }
 

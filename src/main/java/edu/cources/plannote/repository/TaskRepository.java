@@ -47,10 +47,4 @@ public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
 
     @Query(value = "select tasks from TaskEntity tasks where tasks.projectTask.projectId = :projectId and tasks.userTask.identifier = :userId order by tasks.taskStatus.statusId, tasks.taskPriority.priorityId")
     List<TaskEntity> findTasksByProjectIdAndUserId(@Param("projectId") UUID projectId, @Param("userId") UUID userId);
-
-//    @Modifying
-//    @Query(value = "SELECT task_list.task_id FROM task_list INNER JOIN user_project_list ON task_list.project_task_id=user_project_list.project_id INNER JOIN project_list ON project_list.id=task_list.project_task_id WHERE user_project_list.user_id = :userId AND project_list.project_name = :projectName",
-//                    nativeQuery = true)
-//    @Transactional
-//    List<TaskEntity> findTasksByProjectName(@Param("userId") UUID userId, @Param("projectName") String projectName);
 }

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -27,8 +28,8 @@ public class SubtaskEntity {
     private TaskEntity taskSubtask;
 
     @Column(name = "subtask_time_start")
-    private Instant subtaskTimeStart;
+    private LocalDateTime subtaskTimeStart;
 
     @Column(name = "subtask_time_end")
-    private Instant subtaskTimeEnd;
+    private LocalDateTime subtaskTimeEnd;
 }

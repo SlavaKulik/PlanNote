@@ -1,8 +1,6 @@
 package edu.cources.plannote.service;
 
-import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.dto.UserDto;
-import edu.cources.plannote.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
