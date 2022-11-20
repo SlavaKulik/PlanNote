@@ -16,20 +16,6 @@ import java.util.UUID;
 
 @Repository
 public interface SubtaskRepository extends JpaRepository<SubtaskEntity, UUID>{
-    @Query(value = "select subtask from SubtaskEntity subtask where subtask.taskSubtask.taskId = :taskId")
-    List<SubtaskEntity> findSubtasksByTaskId(@Param("taskId") UUID taskId);
-    @Modifying
-    @Query(value = "update SubtaskEntity subtask set subtask.subtaskName = :newName where subtask.subtaskId = :id")
-    @Transactional
-    void changeSubtaskName(@Param(value = "id") UUID id, @Param(value = "newName") String newName);
 
-    @Modifying
-    @Query(value = "update SubtaskEntity subtask set subtask.subtaskTimeStart = :newTime where subtask.subtaskId = :id")
-    @Transactional
-    void changeSubtaskStartTime(@Param(value = "id") UUID id, @Param(value = "newTime") LocalDateTime newTime);
-
-    @Modifying
-    @Query(value = "update SubtaskEntity subtask set subtask.subtaskTimeEnd = :newTime where subtask.subtaskId = :id")
-    @Transactional
-    void changeSubtaskEndTime(@Param(value = "id") UUID id, @Param(value = "newTime") LocalDateTime newTime);
+    List<SubtaskEntity> findSubtaskEntityByTaskSubtask(TaskEntity taskSubtask);
 }

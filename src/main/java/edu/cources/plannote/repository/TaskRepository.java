@@ -17,31 +17,6 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
-    @Modifying
-    @Query(value = "update TaskEntity task set task.taskName = :newName where task.taskId = :id")
-    @Transactional
-    void changeTaskName(@Param(value = "id") UUID id, @Param(value = "newName") String newName);
-
-    @Modifying
-    @Query(value = "update TaskEntity task set task.taskStatus = :newStatus where task.taskId = :id")
-    @Transactional
-    void changeTaskStatus(@Param(value = "id") UUID id, @Param(value = "newStatus") StatusEntity newStatus);
-
-    @Modifying
-    @Query(value = "update TaskEntity task set task.taskTimeStart = :newTime where task.taskId = :id")
-    @Transactional
-    void changeTaskTimeFrom(@Param(value = "id") UUID id, @Param(value = "newTime") LocalDateTime newTime);
-
-    @Modifying
-    @Query(value = "update TaskEntity task set task.taskTimeEnd = :newTime where task.taskId = :id")
-    @Transactional
-    void changeTaskTimeEnd(@Param(value = "id") UUID id, @Param(value = "newTime") LocalDateTime newTime);
-
-    @Modifying
-    @Query(value = "update TaskEntity task set task.taskPriority = :newPriority where task.taskId = :id")
-    @Transactional
-    void changeTaskPriority(@Param(value = "id") UUID id, @Param(value = "newPriority") PriorityEntity newPriority);
-
     @Query(value = "select tasks from TaskEntity tasks where tasks.projectTask.projectId = :projectId")
     List<TaskEntity> findTasksByProjectId(@Param("projectId") UUID projectId);
 

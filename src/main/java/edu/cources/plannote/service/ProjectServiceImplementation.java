@@ -9,12 +9,10 @@ import edu.cources.plannote.repository.SubtaskRepository;
 import edu.cources.plannote.repository.TaskRepository;
 import edu.cources.plannote.utils.DtoToEntity;
 import edu.cources.plannote.utils.EntityToDto;
-import edu.cources.plannote.utils.SubtaskMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -43,55 +41,36 @@ public class ProjectServiceImplementation implements ProjectService{
     }
 
     @Override
-    public List<SubtaskEntity> subtaskList() {
-        return subtaskRepository.findAll();
-    }
-
-    @Override
     public void addNewSubtask(SubtaskDto subtask) {
         SubtaskEntity subtaskEntity = DtoToEntity.subtaskDtoToEntity(subtask);
         subtaskRepository.save(subtaskEntity); }
 
+
     @Override
     public List<SubtaskDto> findSubtasksByTaskId(UUID taskId) {
-        return subtaskRepository.findSubtasksByTaskId(taskId).stream()
+        TaskEntity task = new TaskEntity();
+        task.setTaskId(taskId);
+        return subtaskRepository.findSubtaskEntityByTaskSubtask(task).stream()
                 .map(EntityToDto::subtaskEntityToDto)
                 .toList();
     }
 
-    @Override
-    public void changeSubtaskName(UUID id, String newName) { subtaskRepository.changeSubtaskName(id, newName); }
-
-//    @Override
-//    public void updateSubtaskNameFromDto(SubtaskDto subtaskDto) {
-//        System.out.println("start");
-//        Optional<SubtaskEntity> subtask = subtaskRepository.findById(UUID.fromString(subtaskDto.getId()));
-//        SubtaskEntity subtask1 = DtoToEntity.subtaskDtoToEntity(subtaskDto);
-//        subtask.get().setSubtaskName(subtask1.getSubtaskName());
-//        subtaskRepository.save(subtask.get());
-//        System.out.println("end");
-//    }
 
     @Override
-    public void updateSubtaskNameFromDto(SubtaskDto subtaskDto) {
-        System.out.println("start");
+    public void updateSubtaskFromDto(SubtaskDto subtaskDto) {
         SubtaskEntity subtask = subtaskRepository.getReferenceById(UUID.fromString(subtaskDto.getId()));
-        subtask.setSubtaskName(subtaskDto.getSubtaskName());
+        String name = subtaskDto.getSubtaskName();
+        String timeFrom = subtaskDto.getStartTime();
+        String timeTill = subtaskDto.getEndTime();
+        if (Objects.nonNull(name)) {
+            subtask.setSubtaskName(name);
+        }
+        else if (Objects.nonNull(timeFrom)) {
+            subtask.setSubtaskTimeStart(LocalDateTime.parse(timeFrom));
+        }
+        else
+            subtask.setSubtaskTimeEnd(LocalDateTime.parse(timeTill));
         subtaskRepository.save(subtask);
-        System.out.println("end");
-    }
-
-    @Override
-    public void changeSubtaskStartTime(UUID id, LocalDateTime newTime) { subtaskRepository.changeSubtaskStartTime(id, newTime); }
-
-    @Override
-    public void changeSubtaskEndTime(UUID id, LocalDateTime newTime) { subtaskRepository.changeSubtaskEndTime(id, newTime); }
-
-    @Override
-    public List<TaskDto> taskList() {
-        return taskRepository.findAll().stream()
-                .map(EntityToDto::taskEntityToDto)
-                .toList();
     }
 
     @Override
@@ -101,19 +80,30 @@ public class ProjectServiceImplementation implements ProjectService{
     }
 
     @Override
-    public void changeTaskName(UUID id, String newName) { taskRepository.changeTaskName(id, newName); }
-
-    @Override
-    public void changeTaskStatus(UUID id, StatusEntity newStatus) { taskRepository.changeTaskStatus(id, newStatus); }
-
-    @Override
-    public void changeTaskTimeFrom(UUID id, LocalDateTime newTime) { taskRepository.changeTaskTimeFrom(id, newTime); }
-
-    @Override
-    public void changeTaskTimeEnd(UUID id, LocalDateTime newTime) { taskRepository.changeTaskTimeEnd(id, newTime); }
-
-    @Override
-    public void changeTaskPriority(UUID id, PriorityEntity newPriority) { taskRepository.changeTaskPriority(id, newPriority); }
+    public void updateTaskFromDto(TaskDto taskDto) {
+        TaskEntity task = taskRepository.getReferenceById(UUID.fromString(taskDto.getId()));
+        String name = taskDto.getTaskName();
+        String statusStr = taskDto.getStatusTask();
+        String timeFrom = taskDto.getStartTime();
+        String timeTill = taskDto.getEndTime();
+        String priorityStr = taskDto.getPriorityTask();
+        if (Objects.nonNull(name)) {
+            task.setTaskName(name);
+        } else if (Objects.nonNull(statusStr)) {
+            StatusEntity status = new StatusEntity();
+            status.setStatusId(statusStr);
+            task.setTaskStatus(status);
+        } else if (Objects.nonNull(timeFrom)) {
+            task.setTaskTimeStart(LocalDateTime.parse(timeFrom));
+        } else if (Objects.nonNull(timeTill)) {
+            task.setTaskTimeEnd(LocalDateTime.parse(timeTill));
+        } else {
+            PriorityEntity priority = new PriorityEntity();
+            priority.setPriorityId(priorityStr);
+            task.setTaskPriority(priority);
+        }
+        taskRepository.save(task);
+    }
 
     @Override
     public List<TaskDto> findTasksByProjectId(UUID projectId) {

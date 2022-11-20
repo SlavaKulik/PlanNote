@@ -16,33 +16,15 @@ import java.util.UUID;
 
 public interface ProjectService {
 
-    List<SubtaskEntity> subtaskList();
-
     void addNewSubtask(SubtaskDto subtask);
 
     List<SubtaskDto> findSubtasksByTaskId(UUID taskId);
 
-    void changeSubtaskName(UUID id, String newName);
-
-    void updateSubtaskNameFromDto(SubtaskDto subtaskDto);
-
-    void changeSubtaskStartTime(UUID id, LocalDateTime newTime);
-
-    void changeSubtaskEndTime(UUID id, LocalDateTime newTime);
-
-    List<TaskDto> taskList();
+    void updateSubtaskFromDto(SubtaskDto subtaskDto);
 
     void addNewTask(TaskDto task);
 
-    void changeTaskName(UUID id, String newName);
-
-    void changeTaskStatus(UUID id, StatusEntity newStatus);
-
-    void changeTaskTimeFrom(UUID id, LocalDateTime newTime);
-
-    void changeTaskTimeEnd(UUID id, LocalDateTime newTime);
-
-    void changeTaskPriority(UUID id, PriorityEntity newPriority);
+    void updateTaskFromDto(TaskDto taskDto);
 
     List<TaskDto> findTasksByProjectId(UUID projectId);
 

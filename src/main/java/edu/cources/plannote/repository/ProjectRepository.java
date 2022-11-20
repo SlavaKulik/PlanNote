@@ -24,6 +24,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
     @Transactional
     void addUserToProject(@Param("userName") String userName, @Param("projectId") UUID projectId);
 
+
     @Query(value = "select project.projectName from ProjectEntity project where project.projectId = :projectId")
     String getProjectNameById(@Param("projectId") UUID projectId);
 }

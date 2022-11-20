@@ -3,22 +3,15 @@ package edu.cources.plannote.controller;
 import edu.cources.plannote.dto.*;
 import edu.cources.plannote.entity.*;
 import edu.cources.plannote.service.CustomUserDetailsService;
-import edu.cources.plannote.service.PlannoteService;
+import edu.cources.plannote.service.TransactionService;
 import edu.cources.plannote.service.ProjectService;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,16 +21,16 @@ import java.util.UUID;
 public class GeneralController {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final PlannoteService plannoteService;
+    private final TransactionService transactionService;
     private final ProjectService projectService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public GeneralController(CustomUserDetailsService customUserDetailsService,
-                             PlannoteService plannoteService,
+                             TransactionService transactionService,
                              ProjectService projectService,
                              BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.customUserDetailsService = customUserDetailsService;
-        this.plannoteService = plannoteService;
+        this.transactionService = transactionService;
         this.projectService = projectService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -185,7 +178,11 @@ public class GeneralController {
             @RequestParam("taskName") String taskName) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        projectService.changeTaskName(taskId, taskName);
+        TaskDto taskDto = TaskDto.builder()
+                .id(task)
+                .taskName(taskName)
+                .build();
+        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -199,9 +196,11 @@ public class GeneralController {
             @RequestParam("taskStatus") String taskStatus) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        StatusEntity status = new StatusEntity();
-        status.setStatusId(taskStatus);
-        projectService.changeTaskStatus(taskId, status);
+        TaskDto taskDto = TaskDto.builder()
+                .id(task)
+                .statusTask(taskStatus)
+                .build();
+        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -215,8 +214,11 @@ public class GeneralController {
             @RequestParam("taskTimeStart") String taskTimeStart) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        LocalDateTime time = LocalDateTime.parse(taskTimeStart);
-        projectService.changeTaskTimeFrom(taskId, time);
+        TaskDto taskDto = TaskDto.builder()
+                .id(task)
+                .startTime(taskTimeStart)
+                .build();
+        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -230,8 +232,11 @@ public class GeneralController {
             @RequestParam("taskTimeEnd") String taskTimeEnd) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        LocalDateTime time = LocalDateTime.parse(taskTimeEnd);
-        projectService.changeTaskTimeEnd(taskId, time);
+        TaskDto taskDto = TaskDto.builder()
+                .id(task)
+                .endTime(taskTimeEnd)
+                .build();
+        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -245,9 +250,11 @@ public class GeneralController {
             @RequestParam("taskPriority") String taskPriority) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        PriorityEntity priority = new PriorityEntity();
-        priority.setPriorityId(taskPriority);
-        projectService.changeTaskPriority(taskId, priority);
+        TaskDto taskDto = TaskDto.builder()
+                .id(task)
+                .priorityTask(taskPriority)
+                .build();
+        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -260,7 +267,7 @@ public class GeneralController {
             @ModelAttribute("model") ModelMap model) {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
-        List<TransactionDto> transactions = plannoteService.getTransactionsByTaskId(taskId);
+        List<TransactionDto> transactions = transactionService.getTransactionsByTaskId(taskId);
         List<SubtaskDto> subtasks = projectService.findSubtasksByTaskId(taskId);
         model.addAttribute("transactionList", transactions);
         model.addAttribute("subtaskList", subtasks);
@@ -292,7 +299,7 @@ public class GeneralController {
                 .transactionMoneyFlow(transactionMoneyFlow)
                 .task(taskEntity)
                 .build();
-        plannoteService.addNewTransaction(transactionDto);
+        transactionService.addNewTransaction(transactionDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("/pages/tasks/add_transaction", model);
@@ -343,7 +350,7 @@ public class GeneralController {
                 .id(subtask)
                 .subtaskName(subtaskName)
                 .build();
-        projectService.updateSubtaskNameFromDto(subtaskDto);
+        projectService.updateSubtaskFromDto(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         model.addAttribute("subtasksId", subtaskId);
@@ -360,8 +367,11 @@ public class GeneralController {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
         UUID subtaskId = UUID.fromString(subtask);
-        LocalDateTime time = LocalDateTime.parse(startTime);
-        projectService.changeSubtaskStartTime(subtaskId, time);
+        SubtaskDto subtaskDto = SubtaskDto.builder()
+                .id(subtask)
+                .startTime(startTime)
+                .build();
+        projectService.updateSubtaskFromDto(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         model.addAttribute("subtasksId", subtaskId);
@@ -378,8 +388,11 @@ public class GeneralController {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
         UUID subtaskId = UUID.fromString(subtask);
-        LocalDateTime time = LocalDateTime.parse(endTime);
-        projectService.changeSubtaskEndTime(subtaskId, time);
+        SubtaskDto subtaskDto = SubtaskDto.builder()
+                .id(subtask)
+                .endTime(endTime)
+                .build();
+        projectService.updateSubtaskFromDto(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         model.addAttribute("subtasksId", subtaskId);
