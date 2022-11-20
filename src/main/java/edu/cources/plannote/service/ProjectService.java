@@ -24,6 +24,8 @@ public interface ProjectService {
 
     void changeSubtaskName(UUID id, String newName);
 
+    void updateSubtaskNameFromDto(SubtaskDto subtaskDto);
+
     void changeSubtaskStartTime(UUID id, LocalDateTime newTime);
 
     void changeSubtaskEndTime(UUID id, LocalDateTime newTime);

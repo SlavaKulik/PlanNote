@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface SubtaskRepository extends JpaRepository<SubtaskEntity, UUID> {
+public interface SubtaskRepository extends JpaRepository<SubtaskEntity, UUID>{
     @Query(value = "select subtask from SubtaskEntity subtask where subtask.taskSubtask.taskId = :taskId")
     List<SubtaskEntity> findSubtasksByTaskId(@Param("taskId") UUID taskId);
     @Modifying

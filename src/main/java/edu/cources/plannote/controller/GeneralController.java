@@ -51,13 +51,6 @@ public class GeneralController {
         return new ModelAndView("/pages/users/all_users", model);
     }
 
-//    @GetMapping(value = "/users/all-users")
-//    public String allUsers(@ModelAttribute("model") ModelMap model) {
-//        List<UserDto> users = customUserDetailsService.userList();
-//        model.addAttribute("userList", users);
-//        return "/pages/users/all_users";
-//    }
-//
     @GetMapping(value = "/registration")
     public String registration(){ return "/pages/users/add_user"; }
 
@@ -346,7 +339,11 @@ public class GeneralController {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
         UUID subtaskId = UUID.fromString(subtask);
-        projectService.changeSubtaskName(subtaskId, subtaskName);
+        SubtaskDto subtaskDto = SubtaskDto.builder()
+                .id(subtask)
+                .subtaskName(subtaskName)
+                .build();
+        projectService.updateSubtaskNameFromDto(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         model.addAttribute("subtasksId", subtaskId);

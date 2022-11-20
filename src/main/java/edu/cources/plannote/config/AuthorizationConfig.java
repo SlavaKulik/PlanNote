@@ -1,5 +1,8 @@
 package edu.cources.plannote.config;
 
+import edu.cources.plannote.dto.SubtaskDto;
+import edu.cources.plannote.entity.SubtaskEntity;
+import edu.cources.plannote.utils.SubtaskMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

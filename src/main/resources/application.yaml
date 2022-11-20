@@ -5,7 +5,7 @@ spring:
       ddl-auto: "validate"
       dialect: "PostgreSQLDialect"
       default_schema: "plan_note"
-    show-sql: false
+    show-sql: true
 
   datasource:
     initialization-mode: always

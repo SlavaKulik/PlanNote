@@ -9,9 +9,12 @@ import edu.cources.plannote.repository.SubtaskRepository;
 import edu.cources.plannote.repository.TaskRepository;
 import edu.cources.plannote.utils.DtoToEntity;
 import edu.cources.plannote.utils.EntityToDto;
+import edu.cources.plannote.utils.SubtaskMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -58,6 +61,25 @@ public class ProjectServiceImplementation implements ProjectService{
 
     @Override
     public void changeSubtaskName(UUID id, String newName) { subtaskRepository.changeSubtaskName(id, newName); }
+
+//    @Override
+//    public void updateSubtaskNameFromDto(SubtaskDto subtaskDto) {
+//        System.out.println("start");
+//        Optional<SubtaskEntity> subtask = subtaskRepository.findById(UUID.fromString(subtaskDto.getId()));
+//        SubtaskEntity subtask1 = DtoToEntity.subtaskDtoToEntity(subtaskDto);
+//        subtask.get().setSubtaskName(subtask1.getSubtaskName());
+//        subtaskRepository.save(subtask.get());
+//        System.out.println("end");
+//    }
+
+    @Override
+    public void updateSubtaskNameFromDto(SubtaskDto subtaskDto) {
+        System.out.println("start");
+        SubtaskEntity subtask = subtaskRepository.getReferenceById(UUID.fromString(subtaskDto.getId()));
+        subtask.setSubtaskName(subtaskDto.getSubtaskName());
+        subtaskRepository.save(subtask);
+        System.out.println("end");
+    }
 
     @Override
     public void changeSubtaskStartTime(UUID id, LocalDateTime newTime) { subtaskRepository.changeSubtaskStartTime(id, newTime); }
