@@ -1,6 +1,5 @@
 package edu.cources.plannote.service;
 
-import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.dto.UserDto;
 import edu.cources.plannote.entity.UserEntity;
 import edu.cources.plannote.repository.UserRepository;
@@ -23,25 +22,11 @@ public class CustomUserDetailsServiceImplementation implements CustomUserDetails
     }
 
     @Override
-    public List<UserDto> userList() {
-        return userRepository.findAll().stream()
-                .map(EntityToDto::userEntityToDto)
-                .toList();
-    }
-
-    @Override
     public void addNewUser(UserDto userDto) {
         UserEntity user = DtoToEntity.userDtoToEntity(userDto);
         userRepository.save(user);
     }
 
-    @Override
-    public List<UserDto> getUsersByName(String name) {
-        return userRepository.getUsersByName(name)
-                .stream()
-                .map(EntityToDto::userEntityToDto)
-                .toList();
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,7 +36,7 @@ public class CustomUserDetailsServiceImplementation implements CustomUserDetails
 
     @Override
     public List<UserDto> getProjectsByUserId(UUID userId) {
-        return userRepository.getProjectsByUserId(userId)
+        return userRepository.findUserEntitiesByIdentifier(userId)
                 .stream()
                 .map(EntityToDto::userEntityToDto)
                 .toList();

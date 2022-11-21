@@ -10,7 +10,9 @@
                     <th scope="col">Name</th>
                 </tr>
                 <tr>
-                    <td><input class="form-control" id="exampleFormControlInput1" type="text" name="projectName"/></td>
+                    <td><input class="form-control" id="exampleFormControlInput1" type="text" name="projectName"/> <#if error??>
+                            <p class="lead"><em>${error}</em></p>
+                        </#if></td>
                     <td><button type="submit" class="btn btn-primary" value="Save">Save</button>
                         <button type="reset" class="btn btn-primary">Clear</button></td>
                 </tr>

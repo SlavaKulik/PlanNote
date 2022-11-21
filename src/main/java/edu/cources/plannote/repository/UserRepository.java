@@ -13,9 +13,6 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     UserEntity findByUserName(String name);
 
-    @Query(value = "select user from UserEntity user where user.userName = :name")
-    List<UserEntity> getUsersByName(@Param("name") String name);
+    List<UserEntity> findUserEntitiesByIdentifier(UUID id);
 
-    @Query(value = "select user from UserEntity user where user.identifier = :id")
-    List<UserEntity> getProjectsByUserId(@Param("id") UUID userId);
 }

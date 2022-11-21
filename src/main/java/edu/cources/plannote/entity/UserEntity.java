@@ -6,6 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Getter
@@ -21,12 +24,15 @@ public class UserEntity implements UserDetails {
     @Column(name = "id")
     private UUID identifier;
 
+    @Pattern(regexp = "^[a-zA-Z0-9]{4,12}$",
+            message = "username must be of 4 to 12 length with no special characters")
     @Column(name = "user_name")
     private String userName;
 
     @Column(name = "user_password")
     private String userPassword;
 
+    @NotBlank(message = "User position should be specified")
     @Column(name = "user_position")
     private String userPosition;
 

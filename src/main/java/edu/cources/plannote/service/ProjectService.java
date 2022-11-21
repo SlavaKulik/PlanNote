@@ -3,6 +3,7 @@ package edu.cources.plannote.service;
 import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.dto.SubtaskDto;
 import edu.cources.plannote.dto.TaskDto;
+import edu.cources.plannote.dto.UserDto;
 import edu.cources.plannote.entity.*;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,14 +27,17 @@ public interface ProjectService {
 
     void updateTaskFromDto(TaskDto taskDto);
 
-    List<TaskDto> findTasksByProjectId(UUID projectId);
-
+//    List<TaskDto> findTasksByProjectId(UUID projectId);
 
     List<TaskDto> findTasksByProjectIdAndUserId(UUID projectId, UUID userId);
 
     void createNewProject(ProjectDto project);
 
-    void addUserToProject(String userName, UUID projectId);
+    void assignUserToProject(ProjectDto projectDto);
 
-    String getProjectNameById(UUID projectId);
+    String findProjectNameById(UUID projectId);
+
+    List<UserDto> findUsersByProjectId(UUID projectId);
+
+    void deleteUserFromProject(UUID projectId, UUID userId);
 }

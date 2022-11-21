@@ -3,6 +3,7 @@ package edu.cources.plannote.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class TransactionEntity {
     @Column(name = "id")
     private UUID transactionId;
 
+    @NotBlank(message = "Transaction name is mandatory!")
     @Column(name = "transaction_name")
     private String transactionName;
 

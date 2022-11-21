@@ -1,8 +1,11 @@
 package edu.cources.plannote.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +25,7 @@ public class TaskEntity {
     @Column(name = "task_id")
     private UUID taskId;
 
+    @NotBlank(message = "Task name is mandatory")
     @Column(name = "task_name")
     private String taskName;
 

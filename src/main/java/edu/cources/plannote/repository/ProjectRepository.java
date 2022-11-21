@@ -1,30 +1,20 @@
 package edu.cources.plannote.repository;
 
-import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.entity.ProjectEntity;
-import edu.cources.plannote.entity.UserEntity;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Set;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
+    ProjectEntity findProjectByProjectId(UUID projectId);
 
     @Modifying
-    @Query(value = "INSERT INTO user_project_list VALUES((SELECT user_list.id FROM user_list WHERE user_name = :userName), :projectId)" , nativeQuery = true)
     @Transactional
-    void addUserToProject(@Param("userName") String userName, @Param("projectId") UUID projectId);
-
-
-    @Query(value = "select project.projectName from ProjectEntity project where project.projectId = :projectId")
-    String getProjectNameById(@Param("projectId") UUID projectId);
+    @Query(value = "delete from user_project_list where project_id = :projectId and user_id = :userId", nativeQuery = true)
+    void deleteUserFromProject(@Param("projectId") UUID projectId, @Param("userId") UUID userId);
 }

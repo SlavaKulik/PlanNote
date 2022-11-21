@@ -7,11 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CustomUserDetailsService extends UserDetailsService {
-    List<UserDto> userList();
-
     void addNewUser(UserDto user);
-
-    List<UserDto> getUsersByName(String name);
 
     List<UserDto> getProjectsByUserId(UUID userId);
 

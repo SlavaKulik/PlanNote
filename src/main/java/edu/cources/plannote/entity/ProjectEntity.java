@@ -3,6 +3,7 @@ package edu.cources.plannote.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class ProjectEntity {
     @Column(name = "id")
     private UUID projectId;
 
+    @NotBlank(message = "Project name is mandatory!")
     @Column(name = "project_name")
     private String projectName;
 

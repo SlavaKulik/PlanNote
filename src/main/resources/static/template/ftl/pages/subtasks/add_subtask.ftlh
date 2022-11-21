@@ -2,15 +2,28 @@
 <@layout.page>
     <fieldset>
         <legend>
-            Add project
+            Add subtask
         </legend>
-        <form name="addSubtasks" action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/add-subtask" method="post">
-            Name : <input type="text" name="subtaskName"/> <br/>
-            Time from: <input type="datetime-local" name="startTime"> <br/>
-            Time till: <input type="datetime-local" name="endTime"> <br/>
-            <input type="submit" value="  Save  " />
-            <input type="reset" value="  Clear  " />
-        </form>
+        <div class="form-group">
+            <form name="addSubtasks" action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/add-subtask" method="post">
+                <table class="table">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Time from</th>
+                        <th scope="col">Time till</th>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" id="exampleFormControlInput1" type="text" name="subtaskName"/></td>
+                        <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="startTime"></td>
+                        <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="endTime"></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary" value="Save">Save</button>
+                            <button type="reset" class="btn btn-primary">Clear</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </fieldset>
     <a href="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>">Return back</a>
 </@layout.page>

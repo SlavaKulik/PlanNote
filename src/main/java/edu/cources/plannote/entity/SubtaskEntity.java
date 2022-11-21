@@ -3,6 +3,8 @@ package edu.cources.plannote.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,6 +22,7 @@ public class SubtaskEntity {
     @Column(name = "subtask_id")
     private UUID subtaskId;
 
+    @NotBlank(message = "Subtask name is mandatory!")
     @Column(name = "subtask_name")
     private String subtaskName;
 

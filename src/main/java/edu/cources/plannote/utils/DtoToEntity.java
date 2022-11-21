@@ -2,12 +2,11 @@ package edu.cources.plannote.utils;
 
 import edu.cources.plannote.dto.*;
 import edu.cources.plannote.entity.*;
-
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class DtoToEntity {
+
 
     public static ProjectEntity projectDtoToEntity(ProjectDto projectData) {
         return ProjectEntity.builder()

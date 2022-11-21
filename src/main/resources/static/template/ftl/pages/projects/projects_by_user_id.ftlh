@@ -5,10 +5,10 @@
             <th scope="col">#</th>
             <th scope="col">Project name</th>
         </tr>
-        <#list model["userList"] as user>
+        <#list model["projectList"] as projects>
             <tr>
-                <td><#list user.projectId as ids><a href="/my-projects/${ids}/tasks" class="btn btn-primary" role="button">Go!</a><br/></#list></td>
-                <td><#list user.projectName as names>${names}</#list></td>
+                <td><#list projects.projectId as ids><a href="/my-projects/${ids}/tasks" class="btn btn-primary" role="button">Go!</a><br/></#list></td>
+                <td><#list projects.projectName as names>${names}<br/></#list></td>
             </tr>
         </#list>
     </table>

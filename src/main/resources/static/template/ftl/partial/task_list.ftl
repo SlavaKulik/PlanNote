@@ -14,7 +14,7 @@
                 <td>
                     ${task.taskName}
                     <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/${task.id}/edit-name" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="text" name="taskName" required>
+                        <input class="form-control" id="exampleFormControlInput1" type="text" name="taskName">
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>
@@ -32,14 +32,14 @@
                 <td>
                     ${task.startTime}
                     <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/${task.id}/edit-start-time" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeStart" required/>
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeStart"/>
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>
                 <td>
                     ${task.endTime}
                     <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/${task.id}/edit-end-time" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeEnd" required/>
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeEnd"/>
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>

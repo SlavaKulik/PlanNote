@@ -26,7 +26,7 @@ public class TransactionServiceImplementation implements TransactionService {
 
     @Override
     public List<TransactionDto> getTransactionsByTaskId(UUID taskId) {
-        return transactionRepository.getTransactionsByTaskId(taskId).stream()
+        return transactionRepository.findTransactionEntitiesByTaskTransaction_TaskId(taskId).stream()
                 .map(EntityToDto::transactionEntityToDto)
                 .toList();
     }

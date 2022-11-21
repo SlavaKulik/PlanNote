@@ -12,9 +12,9 @@
             </tr>
             <tr>
                 <form name="LogIn" action="/registration" method="post">
-                    <td><input type="text" name="userName" style="min-width: 200px" class="form-control" id="exampleFormControlInput1" required/></td>
-                    <td><input type="password" name="userPassword" style="min-width: 200px" class="form-control" id="exampleFormControlInput1" required/></td>
-                    <td><input type="text" name="userPosition" style="min-width: 200px" class="form-control" id="exampleFormControlInput1" required/></td>
+                    <td><input type="text" name="userName" style="min-width: 200px" class="form-control" id="exampleFormControlInput1"/></td>
+                    <td><input type="password" name="userPassword" style="min-width: 200px" class="form-control" id="exampleFormControlInput1"/></td>
+                    <td><input type="text" name="userPosition" style="min-width: 200px" class="form-control" id="exampleFormControlInput1"/></td>
                     <td><input type="text" name="accountStatus" value="free_user" hidden/> <br/></td>
                     <td><input type="text" name="userScore" value="Newbie" hidden/> <br/></td>
                     <td><input type="text" name="userStatus" value="Project member" hidden/> <br/></td>

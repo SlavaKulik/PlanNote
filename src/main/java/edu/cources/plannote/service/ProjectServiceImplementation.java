@@ -3,30 +3,33 @@ package edu.cources.plannote.service;
 import edu.cources.plannote.dto.ProjectDto;
 import edu.cources.plannote.dto.SubtaskDto;
 import edu.cources.plannote.dto.TaskDto;
+import edu.cources.plannote.dto.UserDto;
 import edu.cources.plannote.entity.*;
 import edu.cources.plannote.repository.ProjectRepository;
 import edu.cources.plannote.repository.SubtaskRepository;
 import edu.cources.plannote.repository.TaskRepository;
+import edu.cources.plannote.repository.UserRepository;
 import edu.cources.plannote.utils.DtoToEntity;
 import edu.cources.plannote.utils.EntityToDto;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProjectServiceImplementation implements ProjectService{
     private final ProjectRepository projectRepository;
     private final SubtaskRepository subtaskRepository;
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     public ProjectServiceImplementation(ProjectRepository projectRepository,
                                         SubtaskRepository subtaskRepository,
-                                        TaskRepository taskRepository) {
+                                        TaskRepository taskRepository,
+                                        UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.subtaskRepository = subtaskRepository;
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -36,8 +39,14 @@ public class ProjectServiceImplementation implements ProjectService{
     }
 
     @Override
-    public void addUserToProject(String userName, UUID projectId) {
-        projectRepository.addUserToProject(userName, projectId);
+    public void assignUserToProject(ProjectDto projectDto) {
+        ProjectEntity project = projectRepository.getReferenceById(UUID.fromString(projectDto.getId()));
+        String userName = projectDto.getUser().getUsername();
+        UserEntity newUser = userRepository.findByUserName(userName);
+        Set<UserEntity> users = project.getUsers();
+        users.add(newUser);
+        project.setUsers(users);
+        projectRepository.save(project);
     }
 
     @Override
@@ -106,22 +115,30 @@ public class ProjectServiceImplementation implements ProjectService{
     }
 
     @Override
-    public List<TaskDto> findTasksByProjectId(UUID projectId) {
-        return taskRepository.findTasksByProjectId(projectId).stream()
-                .map(EntityToDto::taskEntityToDto)
-                .toList();
-    }
-
-    @Override
     public List<TaskDto> findTasksByProjectIdAndUserId(UUID projectId, UUID userId) {
-        return taskRepository.findTasksByProjectIdAndUserId(projectId, userId).stream()
+        return taskRepository.findTasksByProjectIdAndUserId(projectId, userId)
+                .stream()
                 .map(EntityToDto::taskEntityToDto)
                 .toList();
     }
 
     @Override
-    public String getProjectNameById(UUID projectId) {
-        return projectRepository.getProjectNameById(projectId);
+    public String findProjectNameById(UUID projectId) {
+        ProjectEntity project = projectRepository.findProjectByProjectId(projectId);
+        return project.getProjectName();
     }
 
+    @Override
+    public List<UserDto> findUsersByProjectId(UUID projectId) {
+        ProjectEntity project = projectRepository.findProjectByProjectId(projectId);
+        Set<UserEntity> users = project.getUsers();
+        return users.stream()
+                .map(EntityToDto::userEntityToDto)
+                .toList();
+    }
+
+    @Override
+    public void deleteUserFromProject(UUID projectId, UUID userId) {
+        projectRepository.deleteUserFromProject(projectId, userId);
+    }
 }

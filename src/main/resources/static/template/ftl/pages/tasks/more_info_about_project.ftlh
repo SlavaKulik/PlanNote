@@ -24,8 +24,8 @@
     </table>
     <table class="table">
         <tr>
-            <th scope="row">Name</th>
-            <th scope="row">Time from</th>
+            <th scope="col">Name</th>
+            <th scope="col">Time from</th>
             <th scope="col">Time till</th>
         </tr>
         <#list model["subtaskList"] as subtasks>
@@ -40,14 +40,14 @@
                 <td>
                     ${subtasks.startTime}
                     <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/${subtasks.id}/edit-start-time" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="startTime" required/>
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="startTime"/>
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>
                 <td>
                     ${subtasks.endTime}
                     <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>/${subtasks.id}/edit-end-time" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="endTime" required/>
+                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="endTime"/>
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>
