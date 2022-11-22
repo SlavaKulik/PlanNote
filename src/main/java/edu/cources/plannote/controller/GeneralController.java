@@ -148,7 +148,7 @@ public class GeneralController {
         List<UserDto> users = projectService.findUsersByProjectId(id);
         model.addAttribute("projectId", id);
         model.addAttribute("userList", users);
-        return new ModelAndView("/pages/tasks/assign_user_to_project", model);
+        return new ModelAndView("/pages/projects/assign_user_to_project", model);
     }
 
     @PostMapping(value = "/my-projects/{projectId}/assign-members")
@@ -167,7 +167,7 @@ public class GeneralController {
         List<UserDto> users = projectService.findUsersByProjectId(projectId);
         model.addAttribute("userList", users);
         model.addAttribute("projectId", projectId);
-        return "/pages/tasks/assign_user_to_project";
+        return "/pages/projects/assign_user_to_project";
     }
 
     @PostMapping(value = "/my-projects/{projectId}/delete/{userId}")
@@ -184,13 +184,13 @@ public class GeneralController {
             model.addAttribute("userList", users);
             model.addAttribute("error", error);
             model.addAttribute("projectId", projectId);
-            return new ModelAndView("/pages/tasks/assign_user_to_project", model);
+            return new ModelAndView("/pages/projects/assign_user_to_project", model);
         }
         List<UserDto> users = projectService.findUsersByProjectId(projectId);
         projectService.deleteUserFromProject(projectId, userId);
         model.addAttribute("userList", users);
         model.addAttribute("projectId", projectId);
-        return new ModelAndView("/pages/tasks/assign_user_to_project", model);
+        return new ModelAndView("/pages/projects/assign_user_to_project", model);
     }
 
     @GetMapping(value = "/my-projects/{projectId}/tasks")

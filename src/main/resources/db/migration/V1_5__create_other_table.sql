@@ -1,14 +1,13 @@
 create table if not exists project_list (
     id uuid default uuid_generate_v4 (),
     project_name varchar not null,
-     primary key (id)
+    primary key (id)
 );
 
 create table if not exists subtask_list (
     subtask_id uuid default uuid_generate_v4 (),
     subtask_name varchar not null,
     subtask_task_id uuid,
-    subtask_time_start timestamp with time zone,
     subtask_time_end timestamp with time zone,
     primary key (subtask_id)
 );
@@ -19,9 +18,7 @@ create table if not exists task_list (
     project_task_id uuid,
     user_task_id uuid,
     task_status_id varchar not null,
-    task_time_start timestamp with time zone,
     task_time_end timestamp with time zone,
-    label_task_id varchar not null,
     priority_task_id varchar not null,
     primary key (task_id)
 );
@@ -41,7 +38,7 @@ create table if not exists user_list(
     user_position varchar not null,
     status_id varchar not null,
     account_score_id varchar not null,
-    user_status_id varchar not null,
+    user_role varchar not null,
     primary key (id)
 );
 

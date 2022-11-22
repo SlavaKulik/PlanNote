@@ -1,1 +1,0 @@
-alter table user_list add column user_role varchar not null default 'ROLE_USER';
