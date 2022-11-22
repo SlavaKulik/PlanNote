@@ -57,21 +57,18 @@ public class GeneralController {
                     message = "password must be of 6 to 12 length with no special characters") String userPassword,
             @RequestParam("userPosition") @Valid String userPosition,
             @RequestParam("accountStatus") String accountStatus,
-            @RequestParam("userScore") String userScore,
-            @RequestParam("userStatus") String userStatus) {
+            @RequestParam("userScore") String userScore) {
         AccountStatusEntity accountStatusEntity = new AccountStatusEntity();
         accountStatusEntity.setAccountStatusId(accountStatus);
         ScoreEntity scoreEntity = new ScoreEntity();
         scoreEntity.setScore(userScore);
-        UserStatusEntity userStatusEntity = new UserStatusEntity();
-        userStatusEntity.setUserStatusId(userStatus);
+
         UserDto userDto = UserDto.builder()
                 .userName(userName)
                 .userPassword(bCryptPasswordEncoder.encode(userPassword))
                 .userPosition(userPosition)
                 .accountStatus(accountStatusEntity)
                 .score(scoreEntity)
-                .userStatus(userStatusEntity)
                 .userRole("ROLE_USER")
                 .build();
         customUserDetailsService.addNewUser(userDto);
@@ -130,6 +127,19 @@ public class GeneralController {
         return "/pages/projects/projects_by_user_id";
     }
 
+    @PostMapping(value = "/my-projects/{projectId}/delete")
+    public ModelAndView deleteProject(
+            @PathVariable("projectId") String projectId,
+            @ModelAttribute("model") ModelMap model,
+            @AuthenticationPrincipal UserEntity user) {
+        UUID project = UUID.fromString(projectId);
+        projectService.deleteProjectById(project);
+        List<UserDto> projects = customUserDetailsService.getProjectsByUserId(user.getIdentifier());
+        model.addAttribute("projectList", projects);
+        model.addAttribute("projectId", projectId);
+        return new ModelAndView("/pages/projects/projects_by_user_id", model);
+    }
+
     @GetMapping(value = "/my-projects/{projectId}/assign-members")
     public ModelAndView openMyProject(
             @PathVariable(value = "projectId") String projectId,
@@ -161,17 +171,26 @@ public class GeneralController {
     }
 
     @PostMapping(value = "/my-projects/{projectId}/delete/{userId}")
-    public String deleteUserFromProject(
+    public ModelAndView deleteUserFromProject(
             @PathVariable(value = "projectId") String project,
             @PathVariable(value = "userId") String user,
-            @ModelAttribute("model") ModelMap model) {
+            @ModelAttribute("model") ModelMap model,
+            @AuthenticationPrincipal UserEntity authUser) {
         UUID projectId = UUID.fromString(project);
         UUID userId = UUID.fromString(user);
-        projectService.deleteUserFromProject(projectId, userId);
+        if (Objects.equals(authUser.getIdentifier(), userId)) {
+            String error = "You can't remove yourself :)";
+            List<UserDto> users = projectService.findUsersByProjectId(projectId);
+            model.addAttribute("userList", users);
+            model.addAttribute("error", error);
+            model.addAttribute("projectId", projectId);
+            return new ModelAndView("/pages/tasks/assign_user_to_project", model);
+        }
         List<UserDto> users = projectService.findUsersByProjectId(projectId);
+        projectService.deleteUserFromProject(projectId, userId);
         model.addAttribute("userList", users);
         model.addAttribute("projectId", projectId);
-        return "redirect:/my-projects/{projectId}/assign-members";
+        return new ModelAndView("/pages/tasks/assign_user_to_project", model);
     }
 
     @GetMapping(value = "/my-projects/{projectId}/tasks")
@@ -194,7 +213,6 @@ public class GeneralController {
             @AuthenticationPrincipal UserEntity user,
             @RequestParam("taskName") @Valid String taskName,
             @RequestParam("taskStatus") String taskStatus,
-            @RequestParam("taskTimeStart") @NotBlank(message = "Task start time is mandatory!") String taskTimeStart,
             @RequestParam("taskTimeEnd") @NotBlank(message = "Task end time is mandatory!") String taskTimeEnd,
             @RequestParam("taskPriority") String taskPriority) {
         ProjectEntity projectTask = new ProjectEntity();
@@ -209,7 +227,6 @@ public class GeneralController {
                 .user(user)
                 .project(projectTask)
                 .status(status)
-                .startTime(taskTimeStart)
                 .endTime(taskTimeEnd)
                 .priority(priority)
                 .build();
@@ -221,6 +238,18 @@ public class GeneralController {
         model.addAttribute("userName", user.getUsername());
         model.addAttribute("taskList", tasks);
         return new ModelAndView("/pages/tasks/tasks_main_page", model);
+    }
+
+    @GetMapping(value = "/my-projects/{projectId}/tasks/{taskId}/edit-name")
+    public ModelAndView updateTaskName(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task) {
+        UUID projectId = UUID.fromString(project);
+        UUID taskId = UUID.fromString(task);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
     }
 
     @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/edit-name")
@@ -259,19 +288,13 @@ public class GeneralController {
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
     }
 
-    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/edit-start-time")
-    public ModelAndView updateTaskTimeStart(
+    @GetMapping(value = "/my-projects/{projectId}/tasks/{taskId}/edit-end-time")
+    public ModelAndView updateTaskTimeEnd(
             @ModelAttribute("model") ModelMap model,
             @PathVariable("projectId") String project,
-            @PathVariable("taskId") String task,
-            @RequestParam("taskTimeStart") @NotBlank(message = "Task start time is mandatory!") String taskTimeStart) {
+            @PathVariable("taskId") String task) {
         UUID projectId = UUID.fromString(project);
         UUID taskId = UUID.fromString(task);
-        TaskDto taskDto = TaskDto.builder()
-                .id(task)
-                .startTime(taskTimeStart)
-                .build();
-        projectService.updateTaskFromDto(taskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks", model);
@@ -377,7 +400,6 @@ public class GeneralController {
             @PathVariable("projectId") String project,
             @PathVariable("taskId") String task,
             @RequestParam("subtaskName") @Valid String subtaskName,
-            @RequestParam("startTime") @NotBlank(message = "Subtask start time is mandatory!") String startTime,
             @RequestParam("endTime") @NotBlank(message = "Subtask end time is mandatory!") String endTime) {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
@@ -386,13 +408,27 @@ public class GeneralController {
         SubtaskDto subtaskDto = SubtaskDto.builder()
                 .task(taskEntity)
                 .subtaskName(subtaskName)
-                .startTime(startTime)
                 .endTime(endTime)
                 .build();
         projectService.addNewSubtask(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         return new ModelAndView("/pages/subtasks/add_subtask", model);
+    }
+
+    @GetMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-name")
+    public ModelAndView updateSubtaskName(
+            @ModelAttribute("model") ModelMap model,
+            @PathVariable("projectId") String project,
+            @PathVariable("taskId") String task,
+            @PathVariable("subtaskId") String subtask) {
+        UUID taskId = UUID.fromString(task);
+        UUID projectId = UUID.fromString(project);
+        UUID subtaskId = UUID.fromString(subtask);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("taskId", taskId);
+        model.addAttribute("subtasksId", subtaskId);
+        return new ModelAndView("redirect:/my-projects/{projectId}/tasks/{taskId}", model);
     }
 
     @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-name")
@@ -416,21 +452,16 @@ public class GeneralController {
         return new ModelAndView("redirect:/my-projects/{projectId}/tasks/{taskId}", model);
     }
 
-    @PostMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-start-time")
-    public ModelAndView updateSubtaskTimeFrom(
+    @GetMapping(value = "/my-projects/{projectId}/tasks/{taskId}/{subtaskId}/edit-end-time")
+    public ModelAndView updateSubtaskTimeTill(
             @ModelAttribute("model") ModelMap model,
             @PathVariable("projectId") String project,
             @PathVariable("taskId") String task,
-            @PathVariable("subtaskId") String subtask,
-            @RequestParam("startTime") @NotBlank(message = "Subtask start time is mandatory!") String startTime) {
+            @PathVariable("subtaskId") String subtask
+    ) {
         UUID taskId = UUID.fromString(task);
         UUID projectId = UUID.fromString(project);
         UUID subtaskId = UUID.fromString(subtask);
-        SubtaskDto subtaskDto = SubtaskDto.builder()
-                .id(subtask)
-                .startTime(startTime)
-                .build();
-        projectService.updateSubtaskFromDto(subtaskDto);
         model.addAttribute("projectId", projectId);
         model.addAttribute("taskId", taskId);
         model.addAttribute("subtasksId", subtaskId);

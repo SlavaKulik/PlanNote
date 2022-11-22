@@ -1,24 +1,11 @@
 package edu.cources.plannote.utils;
-
 import edu.cources.plannote.dto.*;
 import edu.cources.plannote.entity.*;
-
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntityToDto {
-    public static ProjectDto projectEntityToDto(ProjectEntity project) {
-        return ProjectDto.builder()
-                .id(String.valueOf(project.getProjectId()))
-                .projectName(project.getProjectName())
-                .users(project.getUsers())
-                .user(project.getUsers().iterator().next())
-                //.userId(project.getUsers().iterator().next().getIdentifier())
-                .tasks(project.getTasks())
-                .build();
-    }
 
     public static TaskDto taskEntityToDto(TaskEntity task) {
         return TaskDto.builder()
@@ -27,7 +14,6 @@ public class EntityToDto {
                 .projectTask(task.getProjectTask().getProjectName())
                 .userTask(task.getUserTask().getUsername())
                 .statusTask(task.getTaskStatus().getStatusId())
-                .startTime(String.valueOf(task.getTaskTimeStart()).replace("T", " "))
                 .endTime(String.valueOf(task.getTaskTimeEnd()).replace("T", " "))
                 .priorityTask(task.getTaskPriority().getPriorityId())
                 .transactions(task.getTransactions())
@@ -40,7 +26,6 @@ public class EntityToDto {
                 .id(String.valueOf(subtask.getSubtaskId()))
                 .subtaskName(subtask.getSubtaskName())
                 .task(subtask.getTaskSubtask())
-                .startTime(String.valueOf(subtask.getSubtaskTimeStart()).replace("T", " "))
                 .endTime(String.valueOf(subtask.getSubtaskTimeEnd()).replace("T", " "))
                 .build();
     }
@@ -61,7 +46,6 @@ public class EntityToDto {
                 .userPosition(user.getUserPosition())
                 .accountStatus(user.getAccountStatus())
                 .userScore(user.getUserScore().getScore())
-                .userStatus(user.getUserStatus())
                 .projects(user.getProjects())
                 .projectName(getProjectNames(user))
                 .projectId(getProjectsId(user))

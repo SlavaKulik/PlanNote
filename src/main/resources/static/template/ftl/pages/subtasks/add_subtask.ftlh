@@ -9,12 +9,10 @@
                 <table class="table">
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Time from</th>
                         <th scope="col">Time till</th>
                     </tr>
                     <tr>
                         <td><input class="form-control" id="exampleFormControlInput1" type="text" name="subtaskName"/></td>
-                        <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="startTime"></td>
                         <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="endTime"></td>
                         <td>
                             <button type="submit" class="btn btn-primary" value="Save">Save</button>

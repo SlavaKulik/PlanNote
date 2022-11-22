@@ -69,13 +69,9 @@ public class ProjectServiceImplementation implements ProjectService{
     public void updateSubtaskFromDto(SubtaskDto subtaskDto) {
         SubtaskEntity subtask = subtaskRepository.getReferenceById(UUID.fromString(subtaskDto.getId()));
         String name = subtaskDto.getSubtaskName();
-        String timeFrom = subtaskDto.getStartTime();
         String timeTill = subtaskDto.getEndTime();
         if (Objects.nonNull(name)) {
             subtask.setSubtaskName(name);
-        }
-        else if (Objects.nonNull(timeFrom)) {
-            subtask.setSubtaskTimeStart(LocalDateTime.parse(timeFrom));
         }
         else
             subtask.setSubtaskTimeEnd(LocalDateTime.parse(timeTill));
@@ -93,7 +89,6 @@ public class ProjectServiceImplementation implements ProjectService{
         TaskEntity task = taskRepository.getReferenceById(UUID.fromString(taskDto.getId()));
         String name = taskDto.getTaskName();
         String statusStr = taskDto.getStatusTask();
-        String timeFrom = taskDto.getStartTime();
         String timeTill = taskDto.getEndTime();
         String priorityStr = taskDto.getPriorityTask();
         if (Objects.nonNull(name)) {
@@ -102,8 +97,6 @@ public class ProjectServiceImplementation implements ProjectService{
             StatusEntity status = new StatusEntity();
             status.setStatusId(statusStr);
             task.setTaskStatus(status);
-        } else if (Objects.nonNull(timeFrom)) {
-            task.setTaskTimeStart(LocalDateTime.parse(timeFrom));
         } else if (Objects.nonNull(timeTill)) {
             task.setTaskTimeEnd(LocalDateTime.parse(timeTill));
         } else {
@@ -140,5 +133,10 @@ public class ProjectServiceImplementation implements ProjectService{
     @Override
     public void deleteUserFromProject(UUID projectId, UUID userId) {
         projectRepository.deleteUserFromProject(projectId, userId);
+    }
+
+    @Override
+    public void deleteProjectById(UUID projectId) {
+        projectRepository.deleteProjectEntityByProjectId(projectId);
     }
 }

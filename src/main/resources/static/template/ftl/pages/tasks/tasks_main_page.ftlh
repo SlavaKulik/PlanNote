@@ -17,13 +17,11 @@
             <table class="table">
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Start time</th>
-                    <th scope="col">End time</th>
+                    <th scope="col">Deadline</th>
                     <th scope="col">Priority</th>
                 </tr>
                 <tr>
                     <td><input style="min-width: 200px" class="form-control" id="exampleFormControlInput1" type="text" name="taskName"/></td>
-                    <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeStart"/></td>
                     <td><input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeEnd"/></td>
                     <td><select class="form-control" id="exampleFormControlSelect1" name="taskPriority" style="min-width: 75px">
                             <option value="High">High</option>

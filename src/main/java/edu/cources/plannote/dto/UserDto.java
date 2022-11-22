@@ -31,8 +31,6 @@ public class UserDto {
 
     private String userRole;
 
-    private UserStatusEntity userStatus;
-
     private List<ProjectEntity> projects;
 
     private List<String> projectName;

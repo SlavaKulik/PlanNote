@@ -31,8 +31,6 @@ public class TaskDto {
 
     private StatusEntity status;
 
-    private String startTime;
-
     private String endTime;
 
     private String priorityTask;

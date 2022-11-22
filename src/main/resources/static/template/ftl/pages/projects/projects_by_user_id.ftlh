@@ -7,8 +7,19 @@
         </tr>
         <#list model["projectList"] as projects>
             <tr>
-                <td><#list projects.projectId as ids><a href="/my-projects/${ids}/tasks" class="btn btn-primary" role="button">Go!</a><br/></#list></td>
-                <td><#list projects.projectName as names>${names}<br/></#list></td>
+                <td><#list projects.projectId as ids>
+                        <a href="/my-projects/${ids}/tasks" class="btn btn-primary" role="button">Go!</a><br/>
+                    </#list>
+                </td>
+                <td>
+                    <#list projects.projectName as names><p></names>${names}</p></#list>
+                </td>
+                <td><#list projects.projectId as ids>
+                        <form action="/my-projects/${ids}/delete" method="post">
+                            <button type="submit" class="btn btn-primary" value="delete">Delete</button>
+                        </form>
+                    </#list>
+                </td>
             </tr>
         </#list>
     </table>

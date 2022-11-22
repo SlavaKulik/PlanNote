@@ -17,7 +17,5 @@ public class SubtaskDto {
 
     private TaskEntity task;
 
-    private String startTime;
-
     private String endTime;
 }

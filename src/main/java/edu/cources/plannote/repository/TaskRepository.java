@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, UUID>, PagingAndSortingRepository<TaskEntity, UUID> {
 
-    @Query(value = "select tasks from TaskEntity tasks where tasks.projectTask.projectId = :projectId and tasks.userTask.identifier = :userId order by tasks.taskStatus.statusId, case " +
+    @Query(value = "select tasks from TaskEntity tasks where tasks.projectTask.projectId = :projectId and tasks.userTask.identifier = :userId order by tasks.taskStatus.statusId desc, case " +
             "when tasks.taskPriority.priorityId = 'High' then 1 " +
             "when tasks.taskPriority.priorityId = 'Mid' then 2 " +
             "when tasks.taskPriority.priorityId = 'Low' then 3 " +

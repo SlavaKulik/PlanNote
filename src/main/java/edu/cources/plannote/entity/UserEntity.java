@@ -47,10 +47,6 @@ public class UserEntity implements UserDetails {
     @JoinColumn(name = "account_score_id")
     private ScoreEntity userScore;
 
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_status_id")
-    private UserStatusEntity userStatus;
-
     @ManyToMany(mappedBy = "users")
     private List<ProjectEntity> projects;
 

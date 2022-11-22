@@ -21,7 +21,6 @@ public class DtoToEntity {
                 .projectTask(taskData.getProject())
                 .userTask(taskData.getUser())
                 .taskStatus(taskData.getStatus())
-                .taskTimeStart(LocalDateTime.parse(taskData.getStartTime()))
                 .taskTimeEnd(LocalDateTime.parse(taskData.getEndTime()))
                 .taskPriority(taskData.getPriority())
                 .subtasks(taskData.getSubtasks())
@@ -32,7 +31,6 @@ public class DtoToEntity {
         return SubtaskEntity.builder()
                 .subtaskName(subtaskData.getSubtaskName())
                 .taskSubtask(subtaskData.getTask())
-                .subtaskTimeStart(LocalDateTime.parse(subtaskData.getStartTime()))
                 .subtaskTimeEnd(LocalDateTime.parse(subtaskData.getEndTime()))
                 .build();
     }
@@ -44,7 +42,6 @@ public class DtoToEntity {
                 .userPosition(userData.getUserPosition())
                 .accountStatus(userData.getAccountStatus())
                 .userScore(userData.getScore())
-                .userStatus(userData.getUserStatus())
                 .userRole(userData.getUserRole())
                 .tasks(userData.getTasks())
                 .build();

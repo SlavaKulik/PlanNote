@@ -41,12 +41,3 @@ insert into status_list (status_id) values
     ('To do'),
     ('In-progress'),
     ('Complete');
-
-create table if not exists user_status_list (
-    user_status_id varchar not null,
-    primary key (user_status_id)
-);
-
-insert into user_status_list (user_status_id) values
-    ('Project owner'),
-    ('Project member');

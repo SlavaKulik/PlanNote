@@ -17,4 +17,8 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
     @Transactional
     @Query(value = "delete from user_project_list where project_id = :projectId and user_id = :userId", nativeQuery = true)
     void deleteUserFromProject(@Param("projectId") UUID projectId, @Param("userId") UUID userId);
+
+    @Modifying
+    @Transactional
+    void deleteProjectEntityByProjectId(UUID id);
 }

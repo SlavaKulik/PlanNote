@@ -41,9 +41,6 @@ public class TaskEntity {
     @JoinColumn(name = "task_status_id")
     private StatusEntity taskStatus;
 
-    @Column(name = "task_time_start")
-    private LocalDateTime taskTimeStart;
-
     @Column(name = "task_time_end")
     private LocalDateTime taskTimeEnd;
 

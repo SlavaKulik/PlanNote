@@ -30,9 +30,6 @@ public class SubtaskEntity {
     @JoinColumn(name = "subtask_task_id")
     private TaskEntity taskSubtask;
 
-    @Column(name = "subtask_time_start")
-    private LocalDateTime subtaskTimeStart;
-
     @Column(name = "subtask_time_end")
     private LocalDateTime subtaskTimeEnd;
 }

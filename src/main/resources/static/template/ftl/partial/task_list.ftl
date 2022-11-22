@@ -3,8 +3,7 @@
         <tr>
             <th scope="col">Task name</th>
             <th scope="col">Task status</th>
-            <th scope="col">Time from</th>
-            <th scope="col">Time to</th>
+            <th scope="col">Deadline</th>
             <th scope="col">Task priority</th>
             <th scope="col">Sum</th>
             <th scope="col">More options</th>
@@ -26,13 +25,6 @@
                             <option value="In-progress">In-progress</option>
                             <option value="Complete">Complete</option>
                         </select>
-                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
-                    </form>
-                </td>
-                <td>
-                    ${task.startTime}
-                    <form action="/my-projects/<#if projectId??>${projectId}</#if>/tasks/${task.id}/edit-start-time" method="post">
-                        <input class="form-control" id="exampleFormControlInput1" type="datetime-local" name="taskTimeStart"/>
                         <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </form>
                 </td>
