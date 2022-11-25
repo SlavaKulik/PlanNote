@@ -14,7 +14,7 @@
         <legend>
             Add task
         </legend>
-        <form name="addProject" action="/my-projects/<#if projectId??>${projectId}</#if>/tasks" method="post">
+        <form name="addTask" action="/my-projects/<#if projectId??>${projectId}</#if>/tasks" method="post">
             <table class="table">
                 <tr>
                     <th scope="col">Name</th>

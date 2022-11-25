@@ -19,7 +19,7 @@
                     </#list>
                 </td>
                 <td>
-                    <#list projects.projectName as names><p></names>${names}</p></#list>
+                    <#list projects.projectName as names><p>${names}</p></#list>
                 </td>
                 <td><#list projects.projectId as ids>
                         <form action="/my-projects/${ids}/delete" method="post">

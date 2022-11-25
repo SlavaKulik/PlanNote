@@ -1,6 +1,5 @@
 <#import "../../layouts/main.ftl" as layout>
 <@layout.page>
-
     <fieldset>
         <legend>
             Assign new member

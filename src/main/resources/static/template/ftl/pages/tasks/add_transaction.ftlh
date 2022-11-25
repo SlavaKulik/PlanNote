@@ -21,5 +21,5 @@
             </form>
         </div>
     </fieldset>
-    <a href="/my-projects/<#if projectId??>${projectId}</#if>/tasks" class="btn btn-primary" role="button">Return to tasks</a>
+    <a href="/my-projects/<#if projectId??>${projectId}</#if>/tasks/<#if taskId??>${taskId}</#if>" class="btn btn-primary" role="button">Return to task</a>
 </@layout.page>
